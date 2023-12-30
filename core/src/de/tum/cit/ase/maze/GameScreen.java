@@ -1,10 +1,11 @@
 package de.tum.cit.ase.maze;
-
+// his GamePanel
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
@@ -68,14 +69,43 @@ public class GameScreen implements Screen {
                 textX - 96,
                 textY - 64,
                 64,
-                128
-        );
+                128);
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
     }
 
+    private void handleInput() {
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            camera.translate(-3, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.translate(3, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            camera.translate(0, -3);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            camera.translate(0, 3);
+        }
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100/camera.viewportWidth);
+
+        float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
+        float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
+
+        camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, 100 - effectiveViewportWidth / 2f);
+        camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, 100 - effectiveViewportHeight / 2f);
+    }
+/* .clamp ( value : Float, min : Float, max : Float ) : Float
+value — Value to be clamped, hence to limit this value to a range between the provided min and max
+min — Minimum value.
+max — Maximum value.
+ */
     @Override
     public void resize(int width, int height) {
+        camera.viewportWidth = 0.80f;
+        camera.viewportHeight = 0.80f * height/width;
+        camera.update();
         camera.setToOrtho(false);
     }
 
