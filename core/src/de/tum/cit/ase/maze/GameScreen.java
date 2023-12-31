@@ -3,6 +3,7 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,7 +20,15 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
 
     private float sinusInput = 0f;
+    /*
+    private static final int MAP_WIDTH = 26;
+    private static final int MAP_HEIGHT = 20;
+    private static final String PROMPT_TEXT = "Click anywhere to generate a new map";
+    private static final Color PROMPT_COLOR = Color.CORAL;
+    private static final float PROMPT_FADE_IN = 2f;
+    private static final float PROMPT_FADE_OUT = 4f;
 
+     */
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -27,6 +36,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
+
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -43,7 +53,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+            game.goToMenu(); }
+            else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                game.goToGame();
         }
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
