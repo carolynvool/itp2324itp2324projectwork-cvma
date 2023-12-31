@@ -82,20 +82,29 @@ public class MazeRunnerGame extends Game {
      * Loads the character animation from the character.png file.
      */
     private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+        Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png"));
 
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4;
+        int frameWidth = 221;
+        int frameHeight = 212;
+        int rows = 4;
+        int cols = 5;
+        int animationFrames = rows * cols;
 
         // libGDX internal Array instead of ArrayList because of performance
         Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
 
         // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
+        /* for (int col = 0; col < animationFrames; col++) {
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
         }
-
+         */
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int startX = col * frameWidth;
+                int startY = row * frameHeight;
+                walkFrames.add(new TextureRegion(walkSheet, startX, startY, frameWidth, frameHeight));
+            }
+        }
         characterDownAnimation = new Animation<>(0.1f, walkFrames);
     }
 
