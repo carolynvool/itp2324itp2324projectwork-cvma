@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sun.source.doctree.SystemPropertyTree;
@@ -45,7 +46,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         camera.zoom = 1.5f; // Set camera zoom for a closer view
         batch = new SpriteBatch();
 
-        Texture background = new Texture(Gdx.files.internal("backgroundformainscreen.jpg"));
+        Texture background = new Texture(Gdx.files.internal("backgroundformainscreen1.jpeg"));
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
@@ -85,6 +86,8 @@ Texture background; // = new Texture("backgroundformainscreen.png")
 
     @Override
     public void render(float delta) {
+        Texture background = new Texture(Gdx.files.internal("beachbackgroundscreen.jpg"));
+        Gdx.gl.glClearColor(0, 0, 0, 0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         batch.begin();
         if (background != null) {
@@ -93,6 +96,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         batch.end();
         stage.act(Math.min(delta, 1 / 30f)); // Update the stage
         stage.draw(); // Draw the stage
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
