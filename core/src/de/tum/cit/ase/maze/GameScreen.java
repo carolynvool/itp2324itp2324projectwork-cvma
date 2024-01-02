@@ -5,19 +5,28 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import static com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Setters.screenWidth;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
  * It handles the game logic and rendering of the game elements.
  */
 public class GameScreen implements Screen {
-
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+    private Texture objects;
+    Rectangle obesewomanbananafall;
+    private Texture backdrop;
+    Array<Rectangle> gifofthewoman;
 
     private float sinusInput = 0f;
     /*
@@ -45,6 +54,13 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+        objects = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
+        backdrop = new Texture(Gdx.files.internal("basictiles.png"));
+        obesewomanbananafall = new Rectangle();
+        obesewomanbananafall.x = 800 / 2 - 64 / 2; // center the bucket horizontally
+        obesewomanbananafall.y = 20; // bottom left corner of the bucket is 20 pixels above
+        // the bottom screen edge
+
     }
 
 
@@ -53,15 +69,15 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu(); }
-            else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                game.goToGame();
+            game.goToMenu();
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            game.goToGame();
         }
 
-        ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+
+        ScreenUtils.clear(0, 0, 0.2f, 1); // Clear the screen
 
         camera.update(); // Update the camera
-
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
         float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
@@ -73,7 +89,7 @@ public class GameScreen implements Screen {
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
         // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+        font.draw(game.getSpriteBatch(), "Press ESC to go to menu or press SPACE to start game", textX, textY);
 
         // Draw the character next to the text :) / We can reuse sinusInput here
         game.getSpriteBatch().draw(
@@ -83,7 +99,9 @@ public class GameScreen implements Screen {
                 64,
                 128);
 
+
         game.getSpriteBatch().end(); // Important to call this after drawing everything
+
     }
 
     private void handleInput() {
@@ -113,34 +131,42 @@ value — Value to be clamped, hence to limit this value to a range between the 
 min — Minimum value.
 max — Maximum value.
  */
+@Override
+public void resize(int width, int height) { // Called when the screen is resized.
+    // Update viewport, camera, or handle other resize-related tasks.
+    camera.viewportWidth = 0.80f;
+    camera.viewportHeight = 0.80f * height/width;
+    camera.update();
+    camera.setToOrtho(false);
+}
     @Override
-    public void resize(int width, int height) {
-        camera.viewportWidth = 0.80f;
-        camera.viewportHeight = 0.80f * height/width;
-        camera.update();
-        camera.setToOrtho(false);
+    public void pause() { // Called when the game is paused.
+        // Pause ongoing activities or save game state.
     }
 
     @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
+    public void resume() { // Called when the game is resumed.
+        // Resume paused activities or restore game state.
     }
 
     @Override
     public void show() {
-
+        // Called when this screen becomes the current screen.
+        // Initialize UI elements, resources, etc.
     }
 
     @Override
-    public void hide() {
+    public void hide() { // Called when this screen is no longer the current screen.
+        // Dispose of resources, pause ongoing activities, etc.
     }
 
     @Override
-    public void dispose() {
+    public void dispose() { // Called when the screen should release all resources.
+        // Dispose of textures, sounds, and other assets.
     }
 
     // Additional methods and logic can be added as needed for the game screen
 }
+
+    // Additional methods and logic can be added as needed for the game screen
+

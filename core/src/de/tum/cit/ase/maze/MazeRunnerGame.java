@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,6 +24,7 @@ public class MazeRunnerGame extends Game {
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
+    public BitmapFont font;
 
     // UI Skin
     private Skin skin;
@@ -67,7 +69,9 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
     }
-
+    public void render() {
+        super.render(); // important!
+    }
     /**
      * Switches to the game screen.
      */
