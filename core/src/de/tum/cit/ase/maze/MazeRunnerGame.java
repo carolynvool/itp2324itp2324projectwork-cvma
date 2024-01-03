@@ -91,8 +91,8 @@ public class MazeRunnerGame extends Game {
 
         int frameWidth = 221;
         int frameHeight = 212;
-        int rows = 4;
-        int cols = 5;
+        int rows = 5;
+        int cols = 4;
         int animationFrames = rows * cols;
 
         // libGDX internal Array instead of ArrayList because of performance
@@ -110,7 +110,7 @@ public class MazeRunnerGame extends Game {
                 walkFrames.add(new TextureRegion(walkSheet, startX, startY, frameWidth, frameHeight));
             }
         }
-        characterDownAnimation = new Animation<>(0.05f, walkFrames);
+        characterDownAnimation = new Animation<>(0.2f, walkFrames);
     }
 
     /**

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -25,8 +26,9 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
     private Texture objects;
     Rectangle obesewomanbananafall;
-    private Texture backdrop;
+    Texture backdrop;
     Array<Rectangle> gifofthewoman;
+    SpriteBatch batch;
 
     private float sinusInput = 0f;
     /*
@@ -74,9 +76,9 @@ public class GameScreen implements Screen {
             game.goToGame();
         }
 
+        ScreenUtils.clear(0, 0, 0.5f, 1); // Clear the screen
 
-        ScreenUtils.clear(0, 0, 0.2f, 1); // Clear the screen
-
+        Texture backdrop = new Texture(Gdx.files.internal("beachbackgroundscreen.jpg"));
         camera.update(); // Update the camera
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
@@ -87,10 +89,10 @@ public class GameScreen implements Screen {
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
+        // draw the background
+        game.getSpriteBatch().draw(backdrop, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         // Render the text
         font.draw(game.getSpriteBatch(), "Press ESC to go to menu or press SPACE to start game", textX, textY);
-
         // Draw the character next to the text :) / We can reuse sinusInput here
         game.getSpriteBatch().draw(
                 game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
@@ -163,6 +165,7 @@ public void resize(int width, int height) { // Called when the screen is resized
     @Override
     public void dispose() { // Called when the screen should release all resources.
         // Dispose of textures, sounds, and other assets.
+        backdrop.dispose();
     }
 
     // Additional methods and logic can be added as needed for the game screen
