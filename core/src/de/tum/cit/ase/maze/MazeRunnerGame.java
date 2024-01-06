@@ -125,6 +125,7 @@ public class MazeRunnerGame extends Game {
     }
 
     // Getter methods for access from other parts of the game
+
     public Skin getSkin() {
         return skin;
     }
