@@ -22,28 +22,28 @@ public class MazeRunnerGame extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
 
-    // Sprite Batch for rendering
+    // Sprite Batch for rendering 2D graphics
     private SpriteBatch spriteBatch;
+
+    // BitmapFont for rendering fonts
+
     public BitmapFont font;
 
-    // UI Skin
+    // UI Skin for styling
     private Skin skin;
 
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
-    /**
-     * Constructor for MazeRunnerGame.
-     *
-     * @param fileChooser The file chooser for the game, typically used in desktop environment.
-     */
+    // constructor to initialize the game; NativeFileChooser parameter which is used in a desktop environment
     public MazeRunnerGame(NativeFileChooser fileChooser) {
         super();
     }
 
-    /**
-     * Called when the game is created. Initializes the SpriteBatch and Skin.
-     */
+
+    // Called when the game is created. Initializes the SpriteBatch and Skin;
+    // also initializes the character animation; background music is loaded and played;
+    // initial screen is set to the menu screen
     @Override
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
@@ -59,9 +59,8 @@ public class MazeRunnerGame extends Game {
         goToMenu(); // Navigate to the menu screen
     }
 
-    /**
-     * Switches to the menu screen.
-     */
+
+    // go to the menu screen
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
         if (gameScreen != null) {
@@ -72,9 +71,8 @@ public class MazeRunnerGame extends Game {
     public void render() {
         super.render(); // important!
     }
-    /**
-     * Switches to the game screen.
-     */
+
+    // switch to the game screen
     public void goToGame() {
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
         if (menuScreen != null) {
@@ -86,13 +84,15 @@ public class MazeRunnerGame extends Game {
     /**
      * Loads the character animation from the character.png file.
      */
+    // loads character animation from a sprite sheet;
+    // sets up the animation via LibGDX 'Animation' and 'TextureRegion'
     private void loadCharacterAnimation() {
         Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png"));
 
         int frameWidth = 221;
         int frameHeight = 212;
-        int rows = 4;
-        int cols = 5;
+        int rows = 5;
+        int cols = 4;
         int animationFrames = rows * cols;
 
         // libGDX internal Array instead of ArrayList because of performance
@@ -110,7 +110,7 @@ public class MazeRunnerGame extends Game {
                 walkFrames.add(new TextureRegion(walkSheet, startX, startY, frameWidth, frameHeight));
             }
         }
-        characterDownAnimation = new Animation<>(0.05f, walkFrames);
+        characterDownAnimation = new Animation<>(0.2f, walkFrames);
     }
 
     /**
@@ -124,7 +124,7 @@ public class MazeRunnerGame extends Game {
         skin.dispose(); // Dispose the skin
     }
 
-    // Getter methods
+    // Getter methods for access from other parts of the game
     public Skin getSkin() {
         return skin;
     }
