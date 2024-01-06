@@ -29,7 +29,7 @@ public class MazeRunnerGame extends Game {
 
     public BitmapFont font;
 
-    // UI Skin for styling
+    // UI Skin for styling like buttons, labels, tabs
     private Skin skin;
 
     // Character animation downwards
@@ -59,7 +59,6 @@ public class MazeRunnerGame extends Game {
         goToMenu(); // Navigate to the menu screen
     }
 
-
     // go to the menu screen
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
@@ -84,25 +83,22 @@ public class MazeRunnerGame extends Game {
     /**
      * Loads the character animation from the character.png file.
      */
-    // loads character animation from a sprite sheet;
+    // loads character animation from a sprite sheet containing the frames of the animation;
     // sets up the animation via LibGDX 'Animation' and 'TextureRegion'
     private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png"));
-
+        Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png")); //
+    //dimension variables of each frame in the provided sprite sheet; their number of cols and rows
         int frameWidth = 221;
         int frameHeight = 212;
         int rows = 5;
         int cols = 4;
         int animationFrames = rows * cols;
 
-        // libGDX internal Array instead of ArrayList because of performance
+        // libGDX internal Array instead of ArrayList because of performance; array to store the individual frames; region= part of a texture
         Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
 
         // Add all frames to the animation
-        /* for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
-         */
+       // extracting each of the frames from the sprite sheet and adds it to the walkFrames array
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 int startX = col * frameWidth;
@@ -110,7 +106,7 @@ public class MazeRunnerGame extends Game {
                 walkFrames.add(new TextureRegion(walkSheet, startX, startY, frameWidth, frameHeight));
             }
         }
-        characterDownAnimation = new Animation<>(0.2f, walkFrames);
+        characterDownAnimation = new Animation<>(0.2f, walkFrames); // to create the animation at duration of 0.2 seconds
     }
 
     /**
