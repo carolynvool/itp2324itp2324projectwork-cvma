@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-        Texture backdrop;
+
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -77,7 +77,6 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 0.2f, 1); // Clear the screen
 
-        Texture backdrop = new Texture(Gdx.files.internal("beachbackgroundscreen.jpg"));
         camera.update(); // Update the camera
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
@@ -89,8 +88,6 @@ public class GameScreen implements Screen {
 
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
-        // draw the background
-        game.getSpriteBatch().draw(backdrop, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         // Render the text
         font.draw(game.getSpriteBatch(), "Press ESC to go to menu or press SPACE to start game", textX, textY);
 
@@ -101,6 +98,7 @@ public class GameScreen implements Screen {
                 textY - 64,
                 64,
                 128);
+
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
 
