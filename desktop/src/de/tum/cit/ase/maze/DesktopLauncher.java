@@ -9,7 +9,7 @@ import games.spooky.gdx.nativefilechooser.desktop.DesktopFileChooser;
  * The DesktopLauncher class is the entry point for the desktop version of the Maze Runner game.
  * It sets up the game window and launches the game using LibGDX framework.
  */
-public class DesktopLauncher {
+public class DesktopLauncher { // runs the LibGDX game whereby we pass our ApplicationListener implementation and the configuration parameters
 	/**
 	 * The main method sets up the configuration for the game window and starts the application.
 	 *

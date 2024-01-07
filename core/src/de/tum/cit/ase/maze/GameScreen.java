@@ -1,19 +1,17 @@
 package de.tum.cit.ase.maze;
-// his GamePanel
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import static com.badlogic.gdx.graphics.g3d.particles.ParticleShader.Setters.screenWidth;
+import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -28,16 +26,11 @@ public class GameScreen implements Screen {
     private Texture backdrop;
     Array<Rectangle> gifofthewoman;
 
-    private float sinusInput = 0f;
-    /*
-    private static final int MAP_WIDTH = 26;
-    private static final int MAP_HEIGHT = 20;
-    private static final String PROMPT_TEXT = "Click anywhere to generate a new map";
-    private static final Color PROMPT_COLOR = Color.CORAL;
-    private static final float PROMPT_FADE_IN = 2f;
-    private static final float PROMPT_FADE_OUT = 4f;
+    private java.util.Map<Integer, Properties> mapPropertiesByLevel;  // Map to store map properties for each level;
+    // written like that because I have created the class Map, and they have the same name dumb, but I can't start from the beginning
 
-     */
+    private float sinusInput = 0f;
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -45,6 +38,14 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
+
+        // Load map properties for all levels
+        mapPropertiesByLevel = new HashMap<Integer, Properties>();
+        for (int level = 1; level <= 5; level++) {
+            String filePath = "maps/level-" + level + ".properties";
+            Properties properties = Map.loadMapProperties(filePath);
+            mapPropertiesByLevel.put(level, properties);
+        }
 
 
         // Create and configure the camera for the game view
