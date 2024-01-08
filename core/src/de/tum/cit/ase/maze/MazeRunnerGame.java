@@ -21,6 +21,8 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
+    private MapSelection mapSelectionScreen;
+
 
     // Sprite Batch for rendering 2D graphics
     private SpriteBatch spriteBatch;
@@ -54,7 +56,8 @@ public class MazeRunnerGame extends Game {
         // Background sound
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        // backgroundMusic.play(); i muted it so we dont have to listen to it every time we run the game
+        // need a bit of peace during the night
 
         goToMenu(); // Navigate to the menu screen
     }
@@ -66,6 +69,10 @@ public class MazeRunnerGame extends Game {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
+    }
+    public void goToMapSelection() {
+        mapSelectionScreen = new MapSelection(this);
+        setScreen(mapSelectionScreen);
     }
     public void render() {
         super.render(); // important!
@@ -114,6 +121,7 @@ public class MazeRunnerGame extends Game {
      */
     @Override
     public void dispose() {
+        getScreen().hide(); // Hide the current screen
         if (getScreen() != null) {
             getScreen().dispose(); // Dispose the current screen
         }

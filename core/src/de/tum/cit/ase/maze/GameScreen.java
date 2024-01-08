@@ -25,9 +25,7 @@ public class GameScreen implements Screen {
     private Texture objects;
     Rectangle obesewomanbananafall;
     private Texture backdrop;
-
     Array<Rectangle> gifofthewoman;
-
     private java.util.Map<Integer, Properties> mapPropertiesByLevel;  // Map to store map properties for each level;
     // written like that because I have created the class Map, and they have the same name dumb, but I can't start from the beginning
     private float sinusInput = 0f;
@@ -272,7 +270,6 @@ public void resize(int width, int height) { // Called when the screen is resized
         // Render something else logic
         game.getSpriteBatch().draw(cactusTexture, x * 40, y * 40);
     }
-
 }
 
 

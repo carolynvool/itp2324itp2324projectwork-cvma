@@ -46,7 +46,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         camera.zoom = 1.5f; // Set camera zoom for a closer view
         batch = new SpriteBatch();
 
-        Texture background = new Texture(Gdx.files.internal("backgroundformainscreen1.jpeg"));
+        Texture background1 = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
@@ -69,7 +69,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         goToGameButton.addListener(new InputListener() {
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.ENTER) {
-                    game.goToGame(); // Change to the game screen when Enter key is pressed
+                    game.goToMapSelection(); // Change to the game screen when Enter key is pressed -> changed to go to map selection screen
                     return true; // Consume the event
                 }
                 return false; // Let other key events be handled
@@ -78,7 +78,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         goToGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame(); // Change to the game screen when button is pressed
+                game.goToMapSelection(); // Change to the game screen when button is pressed -> changed to go to map selection screen
             }
         });
 
@@ -86,7 +86,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
 
     @Override
     public void render(float delta) {
-        Texture background = new Texture(Gdx.files.internal("beachbackgroundscreen.jpg"));
+        Texture background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Gdx.gl.glClearColor(0, 0, 0, 0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         batch.begin();
