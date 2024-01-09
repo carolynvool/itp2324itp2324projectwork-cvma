@@ -79,12 +79,12 @@ public class GameScreen implements Screen {
         // the bottom screen edge
 
         // Initializing our textures with what we have downloaded from the internet
-        wallTexture = new Texture(Gdx.files.internal("assets/wall.png"));
-        walkableAreaTexture = new Texture(Gdx.files.internal("assets/walkable_area.jpg"));
-        keyTexture = new Texture(Gdx.files.internal("assets/key.png"));
-        trapTexture = new Texture(Gdx.files.internal("assets/chain_trap.png"));
-        enemyTexture = new Texture(Gdx.files.internal("assets/dynamo.png"));
-        cactusTexture = new Texture(Gdx.files.internal("assets/cactus.png"));
+        wallTexture = new Texture(Gdx.files.internal("assets/textures/wall.png"));
+        walkableAreaTexture = new Texture(Gdx.files.internal("assets/textures/walkable_area.jpg"));
+        keyTexture = new Texture(Gdx.files.internal("assets/textures/key.png"));
+        trapTexture = new Texture(Gdx.files.internal("assets/textures/trap.png"));
+        enemyTexture = new Texture(Gdx.files.internal("assets/textures/dynamo.png"));
+        cactusTexture = new Texture(Gdx.files.internal("assets/textures/cactus.png"));
 
     }
 
@@ -104,7 +104,7 @@ public class GameScreen implements Screen {
 
         // Move text in a circular path to have an example of a moving object
         sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
+        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100) - 250;// adapted by -250 to center tha text and gif so that the whole text appears on screen
         float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
         //handleInput();
 
@@ -134,7 +134,7 @@ public class GameScreen implements Screen {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu or press SPACE to start game", textX, textY);
+        font.draw(game.getSpriteBatch(), "ESC to go to menu or SPACE to start game", textX, textY); // made message shorter to fit the screen
 
         // Draw the character next to the text :) / We can reuse sinusInput here
         game.getSpriteBatch().draw(
