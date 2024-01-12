@@ -30,7 +30,7 @@ import com.sun.source.doctree.SystemPropertyTree;
  */
 public class MenuScreen implements Screen {
 MazeRunnerGame game;
-Texture background; // = new Texture("backgroundformainscreen.png")
+Texture background; // = new Texture("backgroundformainscreen.png") // commented out so that it does not blast every time we run the game for now
     SpriteBatch batch;
     private final Stage stage;
     BitmapFont font;
@@ -58,7 +58,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         // Add a label as a title
         table.add(new Label("Press the woman to start game!", game.getSkin(), "title")).padBottom(80).row();
 
-        // Loaded image as a drawable and create and add a button to go to game screen
+        // Loaded image as a drawable and create and add a button to go to game screen; but for us it will be the mid-screen where the player selects a level of map to play in
         // The start button is the woman character
         Texture spritesheetTexture = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png"));
         TextureRegion targetRegion = new TextureRegion(spritesheetTexture, 0, 3 * 212, 221, 212);
@@ -81,9 +81,7 @@ Texture background; // = new Texture("backgroundformainscreen.png")
                 game.goToMapSelection(); // Change to the game screen when button is pressed -> changed to go to map selection screen
             }
         });
-
     }
-
     @Override
     public void render(float delta) {
         Texture background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
@@ -98,7 +96,6 @@ Texture background; // = new Texture("backgroundformainscreen.png")
         stage.draw(); // Draw the stage
         Gdx.input.setInputProcessor(stage);
     }
-
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true); // Update the stage viewport on resize

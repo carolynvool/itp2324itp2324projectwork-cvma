@@ -29,23 +29,21 @@ public class MapSelection implements Screen {
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.getSkin().getFont("font"), Color.WHITE);
         Label explanationLabel = new Label("Choose a level:", labelStyle);
-        explanationLabel.setPosition(100, 250);
+        explanationLabel.setPosition(100, 250); // change the whole table and title to go on an upper position so that all level tabs can be seen
         stage.addActor(explanationLabel);
 
-        for (int i = 1; i <= 5; i++){
-            Texture buttonTexture = new Texture(Gdx.files.internal("buttonStock1.png"));
-            Drawable buttonDrawable = new TextureRegionDrawable((buttonTexture));
-            TextButton levelButton = new TextButton("level" + i, game.getSkin());
-            levelButton.addListener(new ClickListener(){
-                public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new GameScreen(game));
-                }
+        for (int i = 1; i <= 5; i++){ // to create the 5 buttons for each level
+            Texture buttonTexture = new Texture(Gdx.files.internal("buttonStock1.png"));// how the button will look like
+            Drawable buttonDrawable = new TextureRegionDrawable((buttonTexture));// to draw it
+            TextButton levelButton = new TextButton("level" + i, game.getSkin());//for each respective level
+            levelButton.addListener(new ClickListener(){//for the action of each button to be connected to the execution of the code of continuing to the level of label chosen
+                public void clicked(InputEvent event, float x, float y) { // event = clicking;
+                    game.setScreen(new GameScreen(game));}
             });
-            levelButton.setPosition(100, 200 - i * 50);
+            levelButton.setPosition(100, 200 - i * 50); // here to fix the tabs to go up on the screen to be viewed
             stage.addActor(levelButton);
         }
-
-    }
+    }// end of constructor
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -65,22 +63,18 @@ public class MapSelection implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

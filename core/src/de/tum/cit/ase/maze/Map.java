@@ -14,7 +14,7 @@ public class Map { // to load the 5 properties files from the maps folder
         return properties; // return the object containing the properties
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { // move to DesktopLauncher
         String propertiesFilePath1 = "maps/level-1.properties";
         Properties mapProperties1 = loadMapProperties(propertiesFilePath1);
 

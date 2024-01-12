@@ -30,22 +30,24 @@ public class GameScreen implements Screen {
     // written like that because I have created the class Map, and they have the same name dumb, but I can't start from the beginning
     private float sinusInput = 0f;
 
-    // Constants for map values of the properties files provided
+    // Constants for map values of the properties files provided - fix to the same givens as in artemis table
     private static final int WALL = 0;
-    private static final int WALKABLE_AREA = 1;
-    private static final int KEY_TO_COLLECT = 2;
+    private static final int ENTRY_POINT = 1;
+    private static final int EXIT = 2;
     private static final int FIXED_TRAP = 3;
     private static final int DYNAMIC_ENEMY = 4;
-    private static final int CACTUS = 5; // still unsure what it is because I think there is only one thing with value of 5
+    private static final int KEY = 5; // still unsure what it is because I think there is only one thing with value of 5
 
 
-    // Loading our different textures
-    private Texture wallTexture;
-    private Texture walkableAreaTexture;
-    private Texture keyTexture;
-    private Texture trapTexture;
-    private Texture enemyTexture;
-    private Texture cactusTexture;
+    // Loading our different textures - suggestion to use the given textures first and then improve to; check in with the given dimensions and pixels of the provided textures to be matched to new ones
+    // try to first make it work with one map until game actually shows; then figure out the logic for the rest 4
+    //
+    //private Texture wallTexture;
+    // private Texture walkableAreaTexture;
+    //private Texture keyTexture;
+    //private Texture trapTexture;
+    // private Texture enemyTexture;
+    //private Texture cactusTexture;
 
 
     /**
@@ -79,12 +81,12 @@ public class GameScreen implements Screen {
         // the bottom screen edge
 
         // Initializing our textures with what we have downloaded from the internet
-        wallTexture = new Texture(Gdx.files.internal("assets/textures/wall.png"));
-        walkableAreaTexture = new Texture(Gdx.files.internal("assets/textures/walkable_area.jpg"));
-        keyTexture = new Texture(Gdx.files.internal("assets/textures/key.png"));
-        trapTexture = new Texture(Gdx.files.internal("assets/textures/trap.png"));
-        enemyTexture = new Texture(Gdx.files.internal("assets/textures/dynamo.png"));
-        cactusTexture = new Texture(Gdx.files.internal("assets/textures/cactus.png"));
+        // wallTexture = new Texture(Gdx.files.internal("assets/textures/wall.png"));
+        //walkableAreaTexture = new Texture(Gdx.files.internal("assets/textures/walkable_area.jpg"));
+        // keyTexture = new Texture(Gdx.files.internal("assets/textures/key.png"));
+        // trapTexture = new Texture(Gdx.files.internal("assets/textures/trap.png")); // we maybe need a new one; why is it red?
+        //enemyTexture = new Texture(Gdx.files.internal("assets/textures/dynamo.png"));
+        // cactusTexture = new Texture(Gdx.files.internal("assets/textures/cactus.png"));
 
     }
 
@@ -93,11 +95,11 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            game.goToMenu(); // suggested to put the map levels of the mid MapSelection;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //MAIN ISSUE!!!!!!!!!!!!!!!!
             game.goToGame();
         }
-
+        // you can also do the map selection directly here; if map is selected to =1 then you load level 1; level 2 bla bla
         ScreenUtils.clear(0, 0, 0.2f, 1); // Clear the screen
 
         camera.update(); // Update the camera
@@ -163,7 +165,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             camera.translate(0, 3);
         }
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100/camera.viewportWidth);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100 / camera.viewportWidth);
 
         float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
         float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
@@ -172,15 +174,16 @@ public class GameScreen implements Screen {
         camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, 100 - effectiveViewportHeight / 2f);
     }
 
-@Override
-public void resize(int width, int height) { // Called when the screen is resized.
-    // Update viewport, camera, or handle other resize-related tasks.
-    camera.viewportWidth = 0.80f;
-    camera.viewportHeight = 0.80f * height/width;
-    camera.zoom = 0.75f;
-    camera.update();
-    camera.setToOrtho(false);
-}
+    @Override
+    public void resize(int width, int height) { // Called when the screen is resized.
+        // Update viewport, camera, or handle other resize-related tasks.
+        camera.viewportWidth = 0.80f;
+        camera.viewportHeight = 0.80f * height / width;
+        camera.zoom = 0.75f;
+        camera.update();
+        camera.setToOrtho(false);
+    }
+
     @Override
     public void pause() { // Called when the game is paused.
         // Pause ongoing activities or save game state.
@@ -202,16 +205,17 @@ public void resize(int width, int height) { // Called when the screen is resized
         // Dispose of resources, pause ongoing activities, etc.
 
     }
+
     @Override
     public void dispose() { // Called when the screen should release all resources.
         // Dispose of textures, sounds, and other assets.
 
-        wallTexture.dispose();
-        walkableAreaTexture.dispose();
-        keyTexture.dispose();
-        trapTexture.dispose();
-        enemyTexture.dispose();
-        cactusTexture.dispose();
+        //wallTexture.dispose();
+        //walkableAreaTexture.dispose();
+        //keyTexture.dispose();
+        //trapTexture.dispose();
+        //enemyTexture.dispose();
+        //cactusTexture.dispose();
 
     }
 
@@ -219,28 +223,28 @@ public void resize(int width, int height) { // Called when the screen is resized
 
     private void renderElement(int x, int y, int value) {
         // Render based on the interpreted value
-        switch (value) {
-            case WALL:
-                renderWall(x, y);
-                break;
-            case WALKABLE_AREA:
-                renderWalkableArea(x, y);
-                break;
-            case KEY_TO_COLLECT:
-                renderKeyToCollect(x, y);
-                break;
-            case FIXED_TRAP:
-                renderFixedTrap(x, y);
-                break;
-            case DYNAMIC_ENEMY:
-                renderDynamicEnemy(x, y);
-                break;
-            case CACTUS:
-                renderSomethingElse(x, y);
-                break;
-        }
-    }
-
+        // switch (value) {
+        //case WALL:
+        //  renderWall(x, y);
+        //  break;
+        // case WALKABLE_AREA:
+        // renderWalkableArea(x, y);
+        //  break;
+        // case KEY_TO_COLLECT:
+        // renderKeyToCollect(x, y);
+        // break;
+        // case FIXED_TRAP:
+        // renderFixedTrap(x, y);
+        // break;
+        // case DYNAMIC_ENEMY:
+        // renderDynamicEnemy(x, y);
+        // break;
+        // case CACTUS:
+        // renderSomethingElse(x, y);
+        // break;
+        // }
+        // }
+/*
     private void renderWall(int x, int y) {
         // Your rendering logic for a wall element at coordinates (x, y)
         // Example: render a texture or shape at the specified coordinates
@@ -270,7 +274,10 @@ public void resize(int width, int height) { // Called when the screen is resized
         // Render something else logic
         game.getSpriteBatch().draw(cactusTexture, x * 40, y * 40);
     }
+
+ */
+//}
+
+
+    }
 }
-
-
-

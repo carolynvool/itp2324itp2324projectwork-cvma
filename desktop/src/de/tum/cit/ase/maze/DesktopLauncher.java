@@ -32,5 +32,6 @@ public class DesktopLauncher { // runs the LibGDX game whereby we pass our Appli
 
 		// Launch the game
 		new Lwjgl3Application(new MazeRunnerGame(new DesktopFileChooser()), config);
+		// its a no no to have separate ,main methods in different classes
 	}
 }

@@ -1,5 +1,5 @@
 package de.tum.cit.ase.maze;
-// his game prototype
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -71,14 +71,14 @@ public class MazeRunnerGame extends Game {
         }
     }
     public void goToMapSelection() {
-        mapSelectionScreen = new MapSelection(this);
+        mapSelectionScreen = new MapSelection(this); // THIS = THE GAME ITSELF AND IT REPEATS THE GameScreen class
         setScreen(mapSelectionScreen);
     }
     public void render() {
         super.render(); // important!
     }
 
-    // switch to the game screen
+    // switch to the game screen - WE HAVE TO ADAPT CODE TO OUR LOGIC
     public void goToGame() {
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
         if (menuScreen != null) {
