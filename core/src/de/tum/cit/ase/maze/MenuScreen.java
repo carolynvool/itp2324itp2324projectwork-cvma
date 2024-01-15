@@ -29,12 +29,12 @@ import com.sun.source.doctree.SystemPropertyTree;
  * It extends the LibGDX Screen class and sets up the UI components for the menu.
  */
 public class MenuScreen implements Screen {
-MazeRunnerGame game;
-Texture background; // = new Texture("backgroundformainscreen.png") // commented out so that it does not blast every time we run the game for now
+    MazeRunnerGame game;
+    Texture background;
     SpriteBatch batch;
     private final Stage stage;
-    BitmapFont font;
 
+    BitmapFont font;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.

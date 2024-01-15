@@ -23,7 +23,6 @@ public class MazeRunnerGame extends Game {
     private GameScreen gameScreen;
     private MapSelection mapSelectionScreen;
 
-
     // Sprite Batch for rendering 2D graphics
     private SpriteBatch spriteBatch;
 
@@ -37,31 +36,36 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+    // Load the backgroundMusic in order to control it after
+    private Music backgroundMusic;
+
     // constructor to initialize the game; NativeFileChooser parameter which is used in a desktop environment
     public MazeRunnerGame(NativeFileChooser fileChooser) {
         super();
     }
-
+    // the game loop should continuously call render() on the current screen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // Called when the game is created. Initializes the SpriteBatch and Skin;
     // also initializes the character animation; background music is loaded and played;
     // initial screen is set to the menu screen
     @Override
     public void create() {
-        spriteBatch = new SpriteBatch(); // Create SpriteBatch
+        spriteBatch = new SpriteBatch();// Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
         this.loadCharacterAnimation(); // Load character animation
-
         // Play some background music
         // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
-        // backgroundMusic.play(); i muted it so we dont have to listen to it every time we run the game
+        //backgroundMusic.play(); i muted it so we don't have to listen to it every time we run the game
         // need a bit of peace during the night
+        // 1. maybe a different calmer sound during the game play; 2. and sound effects for having a key collected; 3. opening the exit
+        // 1. message appearing for a victory after the exit has been opened; 2. message appearing for a game over after all lives have been used up
+        // set number of available lives to say 5; QUESTION: do we have 5 lives available for all the levels or for each one respectively?
 
-        goToMenu(); // Navigate to the menu screen
+        goToMenu(); // START at the menu screen
     }
-
+    // SWITCH SCREENS METHODS
     // go to the menu screen
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
@@ -70,14 +74,12 @@ public class MazeRunnerGame extends Game {
             gameScreen = null;
         }
     }
+    // go to the mapSelection screen
     public void goToMapSelection() {
         mapSelectionScreen = new MapSelection(this); // THIS = THE GAME ITSELF AND IT REPEATS THE GameScreen class
         setScreen(mapSelectionScreen);
     }
-    public void render() {
-        super.render(); // important!
-    }
-
+    // go to the game screen
     // switch to the game screen - WE HAVE TO ADAPT CODE TO OUR LOGIC
     public void goToGame() {
         this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
@@ -85,6 +87,9 @@ public class MazeRunnerGame extends Game {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
         }
+    }
+    public void render() {
+        super.render(); // important!
     }
 
     /**
@@ -127,6 +132,8 @@ public class MazeRunnerGame extends Game {
         }
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
+        backgroundMusic.dispose(); // Dispose the sound
+        // walkSheet.dispose(); ?????????????????? I know it has to be disposed of but it does not allow me
     }
 
     // Getter methods for access from other parts of the game
@@ -142,4 +149,5 @@ public class MazeRunnerGame extends Game {
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
     }
+
 }

@@ -29,7 +29,7 @@ public class MapSelection implements Screen {
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.getSkin().getFont("font"), Color.WHITE);
         Label explanationLabel = new Label("Choose a level:", labelStyle);
-        explanationLabel.setPosition(100, 250); // change the whole table and title to go on an upper position so that all level tabs can be seen
+        explanationLabel.setPosition(100, 350); // this is for the text position
         stage.addActor(explanationLabel);
 
         for (int i = 1; i <= 5; i++){ // to create the 5 buttons for each level
@@ -40,7 +40,7 @@ public class MapSelection implements Screen {
                 public void clicked(InputEvent event, float x, float y) { // event = clicking;
                     game.setScreen(new GameScreen(game));}
             });
-            levelButton.setPosition(100, 200 - i * 50); // here to fix the tabs to go up on the screen to be viewed
+            levelButton.setPosition(100, 300 - i * 50); // this is for the level tabs position
             stage.addActor(levelButton);
         }
     }// end of constructor

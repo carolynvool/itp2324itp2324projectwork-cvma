@@ -19,13 +19,14 @@ import java.util.Properties;
  */
 
 public class GameScreen implements Screen {
-    private final MazeRunnerGame game;
+    private final MazeRunnerGame game; // connects the MazeRunnerGame
     private final OrthographicCamera camera;
-    private final BitmapFont font;
-    private Texture objects;
-    Rectangle obesewomanbananafall;
-    private Texture backdrop;
-    Array<Rectangle> gifofthewoman;
+    private final BitmapFont font; // for the positioning of the characters in the respective textured levels
+
+    // private Texture objects; // which texture is that
+    Rectangle obesewomanbananafall; // her position on the screen;
+    private Texture backdrop; // which texture is that
+
     private java.util.Map<Integer, Properties> mapPropertiesByLevel;  // Map to store map properties for each level;
     // written like that because I have created the class Map, and they have the same name dumb, but I can't start from the beginning
     private float sinusInput = 0f;
@@ -59,7 +60,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Load map properties for all levels
-        mapPropertiesByLevel = new HashMap<Integer, Properties>();
+        mapPropertiesByLevel = new HashMap<Integer, Properties>(); // where those levels are stored
         for (int level = 1; level <= 5; level++) {
             String filePath = "maps/level-" + level + ".properties";
             Properties properties = Map.loadMapProperties(filePath);
@@ -71,10 +72,10 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false);
         camera.zoom = 0.75f;
 
-        // Get the font from the game's skin
+        // Get the font from the game's skin; the Textures objects and backdrop are loaded but where are they used after??????
         font = game.getSkin().getFont("font");
-        objects = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
-        backdrop = new Texture(Gdx.files.internal("basictiles.png"));
+        // objects = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
+        //backdrop = new Texture(Gdx.files.internal("basictiles.png")); // BASIC TILES HAVE NOT BEEN USED!!!!!!!
         obesewomanbananafall = new Rectangle();
         obesewomanbananafall.x = 800 / 2 - 64 / 2; // center the bucket horizontally
         obesewomanbananafall.y = 20; // bottom left corner of the bucket is 20 pixels above
@@ -92,14 +93,17 @@ public class GameScreen implements Screen {
 
     // Screen interface methods with necessary functionality
     @Override
-    public void render(float delta) {
+    public void render(float delta) { // called every frame and responsible for rendering the game elements
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.goToMenu(); // suggested to put the map levels of the mid MapSelection;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //MAIN ISSUE!!!!!!!!!!!!!!!!
+            // Ensure that you are calling setScreen(new GameScreen(game)) (where game is your instance of MazeRunnerGame) when you want to switch to the game screen.
             game.goToGame();
         }
+
         // you can also do the map selection directly here; if map is selected to =1 then you load level 1; level 2 bla bla
+        // but we prefer the middle screen
         ScreenUtils.clear(0, 0, 0.2f, 1); // Clear the screen
 
         camera.update(); // Update the camera
@@ -110,7 +114,7 @@ public class GameScreen implements Screen {
         float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
         //handleInput();
 
-        // Set up and begin drawing with the sprite batch
+        // Set up and begin drawing with the sprite batch; // STEP 1
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
         game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
@@ -138,7 +142,7 @@ public class GameScreen implements Screen {
         // Render the text
         font.draw(game.getSpriteBatch(), "ESC to go to menu or SPACE to start game", textX, textY); // made message shorter to fit the screen
 
-        // Draw the character next to the text :) / We can reuse sinusInput here
+        // Draw the character next to the text :) / We can reuse sinusInput here; // STEP 2
         game.getSpriteBatch().draw(
                 game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
                 textX - 96,
@@ -146,11 +150,9 @@ public class GameScreen implements Screen {
                 64,
                 128);
 
-
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
+        game.getSpriteBatch().end(); // Important to call this after drawing everything; // STEP 3
 
     }
-
     private void handleInput() {
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -277,7 +279,5 @@ public class GameScreen implements Screen {
 
  */
 //}
-
-
     }
 }
