@@ -3,7 +3,6 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,8 +19,9 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
-    private GameScreen gameScreen;
+    private GameScreen1 gameScreen1;
     private MapSelection mapSelectionScreen;
+    private int selectedLevel;
 
     // Sprite Batch for rendering 2D graphics
     private SpriteBatch spriteBatch;
@@ -64,14 +64,16 @@ public class MazeRunnerGame extends Game {
         // set number of available lives to say 5; QUESTION: do we have 5 lives available for all the levels or for each one respectively?
 
         goToMenu(); // START at the menu screen
+        // setScreen(new GameScreen());
+
     }
     // SWITCH SCREENS METHODS
     // go to the menu screen
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
-        if (gameScreen != null) {
-            gameScreen.dispose(); // Dispose the game screen if it exists
-            gameScreen = null;
+        if (gameScreen1 != null) {
+            gameScreen1.dispose(); // Dispose the game screen if it exists
+            gameScreen1 = null;
         }
     }
     // go to the mapSelection screen
@@ -81,8 +83,8 @@ public class MazeRunnerGame extends Game {
     }
     // go to the game screen
     // switch to the game screen - WE HAVE TO ADAPT CODE TO OUR LOGIC
-    public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+    public void goToGame(int mapNumber) {
+        this.setScreen(new GameScreen1(this, mapNumber)); // Pass mapNumber to the GameScreen constructor
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
@@ -91,7 +93,13 @@ public class MazeRunnerGame extends Game {
     public void render() {
         super.render(); // important!
     }
+    public void setSelectedLevel(int level) {
+        selectedLevel = level;
+    }
 
+    public int getSelectedLevel() {
+        return selectedLevel;
+    }
     /**
      * Loads the character animation from the character.png file.
      */
@@ -133,6 +141,20 @@ public class MazeRunnerGame extends Game {
         skin.dispose(); // Dispose the skin
         backgroundMusic.dispose(); // Dispose the sound
         // walkSheet.dispose(); ?????????????????? I know it has to be disposed of but it does not allow me
+        if (backgroundMusic != null) {
+            backgroundMusic.stop();
+            backgroundMusic.dispose();
+        }
+
+        if (gameScreen1 != null) {
+            gameScreen1.dispose();
+            gameScreen1 = null;
+        }
+
+        if (menuScreen != null) {
+            menuScreen.dispose();
+            menuScreen = null;
+        }
     }
 
     // Getter methods for access from other parts of the game

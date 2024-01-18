@@ -39,17 +39,6 @@ public class Textures extends ApplicationAdapter { // to load the different tile
             }
         }
 
-        @Override
-        public void render() {
-            // Render the tiles (for testing purposes)
-            batch.begin();
-            for (int i = 0; i < tiles.length; i++) {
-                int x = i % 2 * 40; // Adjust the positioning for testing
-                int y = Gdx.graphics.getHeight() - (i / 2 + 1) * 40;
-                batch.draw(tiles[i], x, y, 40, 40); // Adjust the size for testing
-            }
-            batch.end();
-        }
 
         @Override
         public void dispose() {
@@ -60,3 +49,115 @@ public class Textures extends ApplicationAdapter { // to load the different tile
     }
 
 
+// Loading our different textures - suggestion to use the given textures first and then improve to; check in with the given dimensions and pixels of the provided textures to be matched to new ones
+// try to first make it work with one map until game actually shows; then figure out the logic for the rest 4
+//
+//private Texture wallTexture;
+// private Texture walkableAreaTexture;
+//private Texture keyTexture;
+//private Texture trapTexture;
+// private Texture enemyTexture;
+//private Texture cactusTexture;
+
+// Initializing our textures with what we have downloaded from the internet
+// wallTexture = new Texture(Gdx.files.internal("assets/textures/wall.png"));
+//walkableAreaTexture = new Texture(Gdx.files.internal("assets/textures/walkable_area.jpg"));
+// keyTexture = new Texture(Gdx.files.internal("assets/textures/key.png"));
+// trapTexture = new Texture(Gdx.files.internal("assets/textures/trap.png")); // we maybe need a new one; why is it red?
+//enemyTexture = new Texture(Gdx.files.internal("assets/textures/dynamo.png"));
+// cactusTexture = new Texture(Gdx.files.internal("assets/textures/cactus.png"));
+
+/*
+//!!!!!!!!!!!!!!
+// Iterate through levels and render elements based on properties
+        for (int level = 1; level <= 5; level++) {
+                Properties properties = mapPropertiesByLevel.get(level);
+
+                // Iterate through properties and render elements
+                for (Object key : properties.keySet()) {
+                String coordinate = (String) key;
+                int value = Integer.parseInt(properties.getProperty(coordinate));
+
+                // Extract x and y coordinates from the string
+                String[] coordinates = coordinate.split(",");
+                int x = Integer.parseInt(coordinates[0]);
+                int y = Integer.parseInt(coordinates[1]);
+
+                // Render the element based on the value
+                renderElement(x, y, value);
+                }
+                }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+
+/*
+@Override
+    public void dispose() { // Called when the screen should release all resources.
+        // Dispose of textures, sounds, and other assets.
+
+        //wallTexture.dispose();
+        //walkableAreaTexture.dispose();
+        //keyTexture.dispose();
+        //trapTexture.dispose();
+        //enemyTexture.dispose();
+        //cactusTexture.dispose();
+
+    }
+ */
+
+/*
+private void renderElement(int x, int y, int value) {
+        // Render based on the interpreted value
+        // switch (value) {
+        //case WALL:
+        //  renderWall(x, y);
+        //  break;
+        // case WALKABLE_AREA:
+        // renderWalkableArea(x, y);
+        //  break;
+        // case KEY_TO_COLLECT:
+        // renderKeyToCollect(x, y);
+        // break;
+        // case FIXED_TRAP:
+        // renderFixedTrap(x, y);
+        // break;
+        // case DYNAMIC_ENEMY:
+        // renderDynamicEnemy(x, y);
+        // break;
+        // case CACTUS:
+        // renderSomethingElse(x, y);
+        // break;
+        // }
+        // }
+/*
+    private void renderWall(int x, int y) {
+        // Your rendering logic for a wall element at coordinates (x, y)
+        // Example: render a texture or shape at the specified coordinates
+        game.getSpriteBatch().draw(wallTexture, x * 40, y * 40);
+
+    } private void renderWalkableArea(int x, int y) {
+        // Render walkable area logic
+        game.getSpriteBatch().draw(walkableAreaTexture, x * 40, y * 40);
+    }
+
+    private void renderKeyToCollect(int x, int y) {
+        // Render key to collect logic
+        game.getSpriteBatch().draw(keyTexture, x * 40, y * 40);
+    }
+
+    private void renderFixedTrap(int x, int y) {
+        // Render fixed trap logic
+        game.getSpriteBatch().draw(trapTexture, x * 40, y * 40);
+    }
+
+    private void renderDynamicEnemy(int x, int y) {
+        // Render dynamic enemy logic
+        game.getSpriteBatch().draw(enemyTexture, x * 40, y * 40);
+    }
+
+    private void renderSomethingElse(int x, int y) {
+        // Render something else logic
+        game.getSpriteBatch().draw(cactusTexture, x * 40, y * 40);
+    }
+//}
+ */
