@@ -230,4 +230,3 @@ public class MapSelection implements Screen {
         stage.dispose();
     }
 }
-
