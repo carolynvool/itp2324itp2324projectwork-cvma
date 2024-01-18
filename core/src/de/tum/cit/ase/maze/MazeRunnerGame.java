@@ -98,10 +98,10 @@ public class MazeRunnerGame extends Game {
     // loads character animation from a sprite sheet containing the frames of the animation;
     // sets up the animation via LibGDX 'Animation' and 'TextureRegion'
     private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png")); //
+        Texture walkSheet = new Texture(Gdx.files.internal("obesewomandoingcartweels.png")); //
     //dimension variables of each frame in the provided sprite sheet; their number of cols and rows
-        int frameWidth = 221;
-        int frameHeight = 212;
+        int frameWidth = 16;
+        int frameHeight = 16;
         int rows = 5;
         int cols = 4;
         int animationFrames = rows * cols;
@@ -120,7 +120,6 @@ public class MazeRunnerGame extends Game {
         }
         characterDownAnimation = new Animation<>(0.2f, walkFrames); // to create the animation at duration of 0.2 seconds
     }
-
     /**
      * Cleans up resources when the game is disposed.
      */

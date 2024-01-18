@@ -2,9 +2,13 @@ package de.tum.cit.ase.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -22,15 +26,16 @@ public class GameScreen implements Screen {
     private final MazeRunnerGame game; // connects the MazeRunnerGame
     private final OrthographicCamera camera;
     private final BitmapFont font; // for the positioning of the characters in the respective textured levels
-
     // private Texture objects; // which texture is that
     Rectangle obesewomanbananafall; // her position on the screen;
     private Texture backdrop; // which texture is that
-
+    private Animation<TextureRegion> characterDownAnimation;
+    private float characterX, characterY;
+    private float stateTime;
     private java.util.Map<Integer, Properties> mapPropertiesByLevel;  // Map to store map properties for each level;
     // written like that because I have created the class Map, and they have the same name dumb, but I can't start from the beginning
     private float sinusInput = 0f;
-
+    private float zoomLevel = 0.5f;
     // Constants for map values of the properties files provided - fix to the same givens as in artemis table
     private static final int WALL = 0;
     private static final int ENTRY_POINT = 1;
@@ -58,7 +63,10 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-
+        characterX = Gdx.graphics.getWidth() / 2f;
+        characterY = Gdx.graphics.getHeight() / 2f;
+        stateTime = 0f;
+        this.characterDownAnimation = game.getCharacterDownAnimation();
         // Load map properties for all levels
         mapPropertiesByLevel = new HashMap<Integer, Properties>(); // where those levels are stored
         for (int level = 1; level <= 5; level++) {
@@ -69,8 +77,11 @@ public class GameScreen implements Screen {
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
-        camera.setToOrtho(false);
-        camera.zoom = 0.75f;
+        camera.setToOrtho(false, 640, 640);
+        camera.zoom = 1.5f;
+        this.characterX = 320; // initial x position for character
+        this.characterY = 320; // intial y position for character
+
 
         // Get the font from the game's skin; the Textures objects and backdrop are loaded but where are they used after??????
         font = game.getSkin().getFont("font");
@@ -93,9 +104,38 @@ public class GameScreen implements Screen {
 
     // Screen interface methods with necessary functionality
     @Override
-    public void render(float delta) { // called every frame and responsible for rendering the game elements
+    public void render(float delta) {
+        handleInput();
+        update(delta);
+
+        Gdx.gl.glClearColor(0.678f, 0.847f, 0.902f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+        game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+        stateTime += delta;
+        TextureRegion currentFrame = characterDownAnimation.getKeyFrame(stateTime, true);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(currentFrame, characterX, characterY);
+        game.getSpriteBatch().end();
+    }
+
+    private void update(float delta) {
+        characterX = MathUtils.clamp(characterX, 0, 640 - 16);
+        characterY = MathUtils.clamp(characterY, 0, 640 - 16);
+        camera.position.set(characterX + 16 / 2f, characterY + 16 / 2f, 0);
+        // add for any additional logic
+        float cameraX = MathUtils.clamp(characterX - Gdx.graphics.getWidth() / 2f, 0, 640 - Gdx.graphics.getWidth());
+        float cameraY = MathUtils.clamp(characterY - Gdx.graphics.getHeight() / 2f, 0, 640 - Gdx.graphics.getHeight());
+        camera.position.set(cameraX + Gdx.graphics.getWidth() / 2f, cameraY + Gdx.graphics.getHeight() / 2f, 0);
+        camera.zoom = zoomLevel;
+        camera.update();
+    }
+    // called every frame and responsible for rendering the game elements
         // Check for escape key press to go back to the menu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        /* if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.goToMenu(); // suggested to put the map levels of the mid MapSelection;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //MAIN ISSUE!!!!!!!!!!!!!!!!
             // Ensure that you are calling setScreen(new GameScreen(game)) (where game is your instance of MazeRunnerGame) when you want to switch to the game screen.
@@ -153,27 +193,46 @@ public class GameScreen implements Screen {
         game.getSpriteBatch().end(); // Important to call this after drawing everything; // STEP 3
 
     }
-    private void handleInput() {
 
+         */
+    private void handleInput() {
+        float speed = 200f; // Adjust the speed as needed
+        float oldCharacterX = characterX;
+        float oldCharacterY = characterY;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.translate(-3, 0);
+            //camera.translate(-3, 0);
+            characterX -= speed * Gdx.graphics.getDeltaTime();
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.translate(3, 0);
+            //camera.translate(3, 0);
+            characterX += speed * Gdx.graphics.getDeltaTime();
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.translate(0, -3);
+            //camera.translate(0, -3);
+            characterY -= speed * Gdx.graphics.getDeltaTime();
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.translate(0, 3);
+            //camera.translate(0, 3);
+            characterY += speed * Gdx.graphics.getDeltaTime();
+            if (characterX < 0 || characterX > 640 - 16) {
+                characterX = oldCharacterX;
+            }
+            if (characterY < 0 || characterY > 640 - 16) {
+                characterY = oldCharacterY;
+            }
         }
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100 / camera.viewportWidth);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 100 / 640);
+        // Clamp the character position within the map boundaries
+        float mapWidth = 640;
+        float mapHeight = 640;
+        float characterWidth = 16;
+        float characterHeight = 16;
+        characterX = MathUtils.clamp(characterX, 0, 640 - 16);
+        characterY = MathUtils.clamp(characterY, 0, 640 - 16);
 
-        float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
-        float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
-
-        camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, 100 - effectiveViewportWidth / 2f);
-        camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, 100 - effectiveViewportHeight / 2f);
     }
 
     @Override

@@ -3,4 +3,9 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17" />
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="itp2324itp2324projectwork-cvma.core.main" options="--add-exports jdk.jfr/jdk.jfr.internal.consumer=ALL-UNNAMED,ALL-UNNAMED" />
+    </option>
+  </component>
 </project>

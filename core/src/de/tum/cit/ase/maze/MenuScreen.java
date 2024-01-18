@@ -60,7 +60,7 @@ public class MenuScreen implements Screen {
 
         // Loaded image as a drawable and create and add a button to go to game screen; but for us it will be the mid-screen where the player selects a level of map to play in
         // The start button is the woman character
-        Texture spritesheetTexture = new Texture(Gdx.files.internal("obesewomandoingcartwheels.png"));
+        Texture spritesheetTexture = new Texture(Gdx.files.internal("obesewomandoingcartwheels1.png"));
         TextureRegion targetRegion = new TextureRegion(spritesheetTexture, 0, 3 * 212, 221, 212);
         ImageButton goToGameButton = new ImageButton(new TextureRegionDrawable(targetRegion));
 
