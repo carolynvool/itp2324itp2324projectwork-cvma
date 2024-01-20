@@ -46,7 +46,7 @@ public class MenuScreen implements Screen {
         camera.zoom = 1.5f; // Set camera zoom for a closer view
         batch = new SpriteBatch();
 
-        Texture background1 = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
+        background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
@@ -84,7 +84,7 @@ public class MenuScreen implements Screen {
     }
     @Override
     public void render(float delta) {
-        Texture background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
+        background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Gdx.gl.glClearColor(0, 0, 0, 0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
         batch.begin();

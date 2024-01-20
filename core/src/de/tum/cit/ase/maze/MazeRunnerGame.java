@@ -39,6 +39,7 @@ public class MazeRunnerGame extends Game {
     // Load the backgroundMusic in order to control it after
     private Music backgroundMusic;
 
+
     // constructor to initialize the game; NativeFileChooser parameter which is used in a desktop environment
     public MazeRunnerGame(NativeFileChooser fileChooser) {
         super();
