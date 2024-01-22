@@ -34,22 +34,22 @@ public class MenuScreen implements Screen {
     SpriteBatch batch;
     private final Stage stage;
 
-    BitmapFont font;
-
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
      * @param game The main game class, used to access global resources and methods.
      */
     public MenuScreen(MazeRunnerGame game) {
+        this.game = game;
+        background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
+        // Use the existing SpriteBatch from the game
+        batch = game.getSpriteBatch();
+
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
-        batch = new SpriteBatch();
-
-        background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
 
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
-        stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
+        stage = new Stage(viewport, batch); // Create a stage for UI elements
 
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
@@ -69,16 +69,10 @@ public class MenuScreen implements Screen {
         goToGameButton.addListener(new InputListener() {
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.ENTER) {
-                    game.goToMapSelection(); // Change to the game screen when Enter key is pressed -> changed to go to map selection screen
+                    game.goToMenu(); // Change to the game screen when Enter key is pressed -> changed to go to map selection screen
                     return true; // Consume the event
                 }
                 return false; // Let other key events be handled
-            }
-        });
-        goToGameButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.goToMapSelection(); // Change to the game screen when button is pressed -> changed to go to map selection screen
             }
         });
     }
@@ -87,11 +81,12 @@ public class MenuScreen implements Screen {
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Gdx.gl.glClearColor(0, 0, 0, 0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
+
         batch.begin();
-        if (background != null) {
-            batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }
+        // Draw the background
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
+
         stage.act(Math.min(delta, 1 / 30f)); // Update the stage
         stage.draw(); // Draw the stage
         Gdx.input.setInputProcessor(stage);

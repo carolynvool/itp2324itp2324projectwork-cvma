@@ -19,23 +19,15 @@ import java.util.HashMap;
 public class GameScreen1 implements Screen {
     private final MazeRunnerGame game; // connects the MazeRunnerGame
     private final OrthographicCamera camera;
+    private Texture characterTexture;// Load this texture
 
-    private final Texture characterTexture;// Load this texture
     private Rectangle character; // her position on the screen; the woman
-
-    //private Texture backdrop; // which texture is that; the background
     private Animation<TextureRegion> characterDownAnimation;
     private float characterX, characterY;
     private float stateTime;
-
-    //private float sinusInput = 0f;
-    //private float zoomLevel = 0.5f;
-
     private MapRenderer mapRenderer;
-
-   // private int mapNumber;
     private SpriteBatch batch;
-/*
+
     // Define textures for different elements
     private Texture wallTexture; // Make sure to load texture in the constructor
     private Texture entryPointTexture; // Load this texture
@@ -43,16 +35,14 @@ public class GameScreen1 implements Screen {
     private Texture trapTexture; // Load this texture
     private Texture enemyTexture; // Load this texture
     private Texture keyTexture; // Load this texture
-
-    private HashMap<Integer, Texture> textureMapping;
-*/
     private static final int TILE_SIZE = 16;
-    private static final float SPEED = 200f;
 
+    public GameScreen1(MazeRunnerGame game) {
+        this.game = game;
+        this.batch = new SpriteBatch(); // having created a separate batch for the gamescreen1 class so that the disposal of this onedoes not effect the actions on a batch in the maprenderer class
 
-    public GameScreen1(MazeRunnerGame game) { //, int mapNumber
-        /*
         // Load textures
+        characterTexture = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
         wallTexture = new Texture(Gdx.files.internal("basictiles_1.png"));
         entryPointTexture = new Texture(Gdx.files.internal("basictiles_2.png"));
         exitTexture = new Texture(Gdx.files.internal("basictiles_3.png"));
@@ -60,29 +50,13 @@ public class GameScreen1 implements Screen {
         enemyTexture = new Texture(Gdx.files.internal("basictiles_5.png"));
         keyTexture = new Texture(Gdx.files.internal("basictiles_6.png"));
 
-        // Mapping between values in the properties files and their corresponding textures
-        textureMapping = new HashMap<>();
-        textureMapping.put(0, wallTexture);
-        textureMapping.put(1, entryPointTexture);
-        textureMapping.put(2, exitTexture);
-        textureMapping.put(3, trapTexture);
-        textureMapping.put(4, enemyTexture);
-        textureMapping.put(5, keyTexture);
-
-         */
-
-        this.game = game;
-        this.batch = new SpriteBatch(); // having created a separate batch for the gamescreen1 class so that the disposal of this onedoes not effect the actions on a batch in the maprenderer class
-
         // Use a default map number (e.g., 1) for now
         int defaultMapNumber = 1;
+        game.setSelectedLevel(defaultMapNumber);
 
         // Initialize map renderer with the selected map number and textures
-        //mapRenderer = new MapRenderer(mapNumber, this.batch, this);
-        mapRenderer = new MapRenderer(defaultMapNumber, this.batch);
-
-        game.setSelectedLevel(defaultMapNumber);
-        //game.setSelectedLevel(mapNumber);
+        // You should adjust the parameters based on your actual requirements
+        mapRenderer = new MapRenderer(game.getSelectedLevel(), this.batch, this);
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -90,32 +64,10 @@ public class GameScreen1 implements Screen {
         camera.zoom = 1.5f;
         this.characterX = 320; // initial x position for character
         this.characterY = 320; // initial y position for character
-
-        // Get the font from the game's skin; the Textures objects and backdrop are loaded but where are they used after??????
-        // for the positioning of the characters in the respective textured levels
-        BitmapFont font = game.getSkin().getFont("font");
-        characterTexture = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
-        character = new Rectangle();
-        character.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-        character.y = 20; // bottom left corner of the bucket is 20 pixels above
-
-        characterX = Gdx.graphics.getWidth() / 2f;
-        characterY = Gdx.graphics.getHeight() / 2f;
         stateTime = 0f;
         this.characterDownAnimation = game.getCharacterDownAnimation();
     }
 
-    /*
-    private void renderElement(int x, int y, int value) { // used to render game elements related to the character
-        // Render based on the interpreted value
-        Texture texture = textureMapping.get(value);
-        if (texture != null) {
-            game.getSpriteBatch().draw(texture, x * TILE_SIZE, y * TILE_SIZE);
-
-        }
-    }
-
-     */
     @Override
     public void render(float delta) {
         handleInput();
@@ -129,13 +81,19 @@ public class GameScreen1 implements Screen {
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
         this.batch.begin();
-        mapRenderer.render(this.batch);// to draw the map
-       // renderElement((int) characterX / TILE_SIZE, (int) characterY / TILE_SIZE, 1); //to render game-specific elements
 
-        this.batch.draw(currentFrame, characterX, characterY);// draw the character
+        // Call the new renderMap method
+        renderMap();
+
+        this.batch.draw(currentFrame, characterX, characterY);
         this.batch.end();
     }
 
+    private void renderMap() {
+        if (mapRenderer != null) {
+            mapRenderer.renderMap(this.batch);
+        }
+    }
     private void handleInput() {
         float speed = 200f; // Adjust the speed as needed
 
@@ -143,17 +101,17 @@ public class GameScreen1 implements Screen {
         float oldCharacterY = characterY;
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            moveCharacter(-SPEED * Gdx.graphics.getDeltaTime(), 0);
+            moveCharacter(-speed * Gdx.graphics.getDeltaTime(), 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveCharacter(SPEED * Gdx.graphics.getDeltaTime(), 0);
+            moveCharacter(speed * Gdx.graphics.getDeltaTime(), 0);
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            moveCharacter(0, -SPEED * Gdx.graphics.getDeltaTime());
+            moveCharacter(0, -speed * Gdx.graphics.getDeltaTime());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            moveCharacter(0, SPEED * Gdx.graphics.getDeltaTime());
+            moveCharacter(0, speed * Gdx.graphics.getDeltaTime());
         }
 
         // Check for collisions after moving in both X and Y directions
@@ -204,22 +162,17 @@ public class GameScreen1 implements Screen {
         }
         return true;
     }
-
     @Override
     public void show() {
         // Called when this screen becomes the current screen.
         // Initialize UI elements, resources, etc.
     }
-
-
     @Override
     public void resize(int width, int height) {
         // Update viewport, camera, or handle other resize-related tasks.
         camera.viewportWidth = 0.80f;
         camera.viewportHeight = 0.80f * height / width;
         camera.zoom = 0.75f;
-
-       // camera.setToOrtho(false, width, height);
         camera.update();
     }
 
@@ -227,28 +180,14 @@ public class GameScreen1 implements Screen {
     public void pause() {
         // Pause ongoing activities or save game state.
     }
-
     @Override
     public void resume() {
         // Resume paused activities or restore game state.
-
     }
-
     @Override
     public void hide() {
         // Dispose of resources, pause ongoing activities, etc.
         // Dispose of textures, sounds, and other assets.
-    }
-/*
-    @Override
-    public void dispose() {
-        wallTexture.dispose();
-        entryPointTexture.dispose();
-        exitTexture.dispose();
-        trapTexture.dispose();
-        enemyTexture.dispose();
-        keyTexture.dispose();
-        this.batch.dispose();
     }
 
     public Texture getWallTexture() {
@@ -274,13 +213,14 @@ public class GameScreen1 implements Screen {
     public Texture getKeyTexture() {
         return keyTexture;
     }
+    public void setMapRenderer(MapRenderer mapRenderer) {
+        this.mapRenderer = mapRenderer;
+    }
 
- */
 public void dispose() {
     // Dispose of resources, textures, or anything that needs cleanup
     characterTexture.dispose();
-    mapRenderer.dispose(); // Make sure to dispose of resources in MapRenderer if necessary
-    // Dispose of any other resources used in this class
+    mapRenderer.dispose();
     batch.dispose();
 }
 }
