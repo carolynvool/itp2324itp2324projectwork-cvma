@@ -33,9 +33,9 @@ public class GameScreen1 implements Screen {
 
     private MapRenderer mapRenderer;
 
-    private int mapNumber;
+   // private int mapNumber;
     private SpriteBatch batch;
-
+/*
     // Define textures for different elements
     private Texture wallTexture; // Make sure to load texture in the constructor
     private Texture entryPointTexture; // Load this texture
@@ -45,12 +45,13 @@ public class GameScreen1 implements Screen {
     private Texture keyTexture; // Load this texture
 
     private HashMap<Integer, Texture> textureMapping;
-
+*/
     private static final int TILE_SIZE = 16;
     private static final float SPEED = 200f;
 
 
-    public GameScreen1(MazeRunnerGame game, int mapNumber) {
+    public GameScreen1(MazeRunnerGame game) { //, int mapNumber
+        /*
         // Load textures
         wallTexture = new Texture(Gdx.files.internal("basictiles_1.png"));
         entryPointTexture = new Texture(Gdx.files.internal("basictiles_2.png"));
@@ -68,13 +69,20 @@ public class GameScreen1 implements Screen {
         textureMapping.put(4, enemyTexture);
         textureMapping.put(5, keyTexture);
 
+         */
+
         this.game = game;
         this.batch = new SpriteBatch(); // having created a separate batch for the gamescreen1 class so that the disposal of this onedoes not effect the actions on a batch in the maprenderer class
 
-        // Initialize map renderer with the selected map number and textures
-        mapRenderer = new MapRenderer(mapNumber, this.batch, this);
+        // Use a default map number (e.g., 1) for now
+        int defaultMapNumber = 1;
 
-        game.setSelectedLevel(mapNumber);
+        // Initialize map renderer with the selected map number and textures
+        //mapRenderer = new MapRenderer(mapNumber, this.batch, this);
+        mapRenderer = new MapRenderer(defaultMapNumber, this.batch);
+
+        game.setSelectedLevel(defaultMapNumber);
+        //game.setSelectedLevel(mapNumber);
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -97,6 +105,7 @@ public class GameScreen1 implements Screen {
         this.characterDownAnimation = game.getCharacterDownAnimation();
     }
 
+    /*
     private void renderElement(int x, int y, int value) { // used to render game elements related to the character
         // Render based on the interpreted value
         Texture texture = textureMapping.get(value);
@@ -105,6 +114,8 @@ public class GameScreen1 implements Screen {
 
         }
     }
+
+     */
     @Override
     public void render(float delta) {
         handleInput();
@@ -119,7 +130,7 @@ public class GameScreen1 implements Screen {
 
         this.batch.begin();
         mapRenderer.render(this.batch);// to draw the map
-        renderElement((int) characterX / TILE_SIZE, (int) characterY / TILE_SIZE, 1); //to render game-specific elements
+       // renderElement((int) characterX / TILE_SIZE, (int) characterY / TILE_SIZE, 1); //to render game-specific elements
 
         this.batch.draw(currentFrame, characterX, characterY);// draw the character
         this.batch.end();
@@ -191,7 +202,7 @@ public class GameScreen1 implements Screen {
             // Ensure the cell is a free space (you may need to adjust the condition based on your map elements)
             return cellValue != 0;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -228,7 +239,7 @@ public class GameScreen1 implements Screen {
         // Dispose of resources, pause ongoing activities, etc.
         // Dispose of textures, sounds, and other assets.
     }
-
+/*
     @Override
     public void dispose() {
         wallTexture.dispose();
@@ -263,4 +274,13 @@ public class GameScreen1 implements Screen {
     public Texture getKeyTexture() {
         return keyTexture;
     }
+
+ */
+public void dispose() {
+    // Dispose of resources, textures, or anything that needs cleanup
+    characterTexture.dispose();
+    mapRenderer.dispose(); // Make sure to dispose of resources in MapRenderer if necessary
+    // Dispose of any other resources used in this class
+    batch.dispose();
+}
 }

@@ -28,7 +28,7 @@ public class MapSelection implements Screen {
 
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
 
-        createLevelButtons();
+        //createLevelButtons();
     }
     @Override
     public void show() {
@@ -41,6 +41,7 @@ public class MapSelection implements Screen {
         explanationLabel.setPosition(100, 350);
         stage.addActor(explanationLabel);
     }
+    /*
     private void createLevelButtons() {
         for (int i = 1; i <= 5; i++) {
             Texture buttonTexture = new Texture(Gdx.files.internal("buttonStock1.png"));
@@ -59,6 +60,8 @@ public class MapSelection implements Screen {
             stage.addActor(levelButton);
         }
     }
+
+     */
 
     @Override
     public void render(float delta) {

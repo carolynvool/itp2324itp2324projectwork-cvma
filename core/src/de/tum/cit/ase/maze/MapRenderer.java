@@ -21,17 +21,18 @@ public class MapRenderer {
 
     private SpriteBatch spriteBatch;
 
-    private GameScreen1 gameScreen1; // Add a reference to GameScreen1
+   // private GameScreen1 gameScreen1; // Add a reference to GameScreen1
 
-    public MapRenderer(int selectedLevel, SpriteBatch spriteBatch, GameScreen1 gameScreen1) {
+    public MapRenderer(int selectedLevel, SpriteBatch spriteBatch) { //, GameScreen1 gameScreen1
         this.selectedLevel = selectedLevel;
         this.spriteBatch = spriteBatch;
-        this.gameScreen1 = gameScreen1; // Assign the instance of GameScreen1
+       // this.gameScreen1 = gameScreen1; // Assign the instance of GameScreen1
         this.textureMap = new ObjectMap<>();
         coordinateMap = new ObjectMap<>();
-        loadTextures();
-        loadMapProperties();
+       // loadTextures();
+        //loadMapProperties();
     }
+    /*
     private void loadTextures() {
         textureMap.put("0", new TextureRegion(gameScreen1.getWallTexture()));
         textureMap.put("1", new TextureRegion(gameScreen1.getEntryPointTexture()));
@@ -60,6 +61,7 @@ public class MapRenderer {
         }
     }
 
+     */
     private void processProperties(ObjectMap<String, String> properties) {
         width = Integer.parseInt(properties.get("width"));
         height = Integer.parseInt(properties.get("height"));
@@ -104,6 +106,13 @@ public class MapRenderer {
             return mazeData[tileX][tileY];
         }
         return -1; // else...
+    }
+    public void dispose() {
+        // Dispose of any resources used by MapRenderer
+        for (TextureRegion textureRegion : textureMap.values()) {
+            textureRegion.getTexture().dispose();
+        }
+        // Add additional cleanup if needed
     }
 }
 

@@ -20,7 +20,7 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private GameScreen1 gameScreen1;
-    private MapSelection mapSelectionScreen;
+   // private MapSelection mapSelectionScreen;
     private int selectedLevel;
 
     // Sprite Batch for rendering 2D graphics
@@ -78,7 +78,7 @@ public class MazeRunnerGame extends Game {
         }
     }
     // go to the mapSelection screen
-    public void goToMapSelection() {
+    /*public void goToMapSelection() {
         mapSelectionScreen = new MapSelection(this); // THIS = THE GAME ITSELF AND IT REPEATS THE GameScreen class
         setScreen(mapSelectionScreen);
     }
@@ -91,6 +91,8 @@ public class MazeRunnerGame extends Game {
             menuScreen = null;
         }
     }
+
+     */
     public void render() {
         super.render(); // important!
     }
