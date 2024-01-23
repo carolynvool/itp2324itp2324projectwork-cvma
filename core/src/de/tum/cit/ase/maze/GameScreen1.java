@@ -21,7 +21,7 @@ public class GameScreen1 implements Screen {
     private final OrthographicCamera camera;
     private Texture characterTexture;// Load this texture
 
-    private Rectangle character; // her position on the screen; the woman
+   // private Rectangle character; // her position on the screen; the woman
     private Animation<TextureRegion> characterDownAnimation;
     private float characterX, characterY;
     private float stateTime;
@@ -52,7 +52,7 @@ public class GameScreen1 implements Screen {
 
         // Use a default map number (e.g., 1) for now
         int defaultMapNumber = 1;
-        game.setSelectedLevel(defaultMapNumber);
+        game.setSelectedLevel(defaultMapNumber);//inside the parantheses we should have the level which the player chose in the mapselection screen
 
         // Initialize map renderer with the selected map number and textures
         // You should adjust the parameters based on your actual requirements
@@ -91,7 +91,7 @@ public class GameScreen1 implements Screen {
 
     private void renderMap() {
         if (mapRenderer != null) {
-            mapRenderer.renderMap(this.batch);
+            mapRenderer.renderMap(this.batch, characterX, characterY);
         }
     }
     private void handleInput() {
@@ -126,8 +126,8 @@ public class GameScreen1 implements Screen {
         float halfViewportWidth = camera.viewportWidth * 0.5f * camera.zoom;
         float halfViewportHeight = camera.viewportHeight * 0.5f * camera.zoom;
 
-        characterX = MathUtils.clamp(characterX, 0, Gdx.graphics.getWidth() - TILE_SIZE);
-        characterY = MathUtils.clamp(characterY, 0, Gdx.graphics.getHeight() - TILE_SIZE);
+        characterX = MathUtils.clamp(characterX, 0, Gdx.graphics.getWidth() - TILE_SIZE);//maxX
+        characterY = MathUtils.clamp(characterY, 0, Gdx.graphics.getHeight() - TILE_SIZE);//maxY
 
         // Update camera position
         camera.position.set(characterX + TILE_SIZE / 2, characterY + TILE_SIZE / 2, 0);
@@ -213,6 +213,18 @@ public class GameScreen1 implements Screen {
     public Texture getKeyTexture() {
         return keyTexture;
     }
+
+    public Texture getCharacterTexture() {
+        return characterTexture;
+    }
+    public float getCharacterX() {
+        return characterX;
+    }
+
+    public float getCharacterY() {
+        return characterY;
+    }
+
     public void setMapRenderer(MapRenderer mapRenderer) {
         this.mapRenderer = mapRenderer;
     }

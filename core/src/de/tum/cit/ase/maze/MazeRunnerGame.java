@@ -2,6 +2,7 @@ package de.tum.cit.ase.maze;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -136,14 +137,19 @@ public class MazeRunnerGame extends Game {
      */
     @Override
     public void dispose() {
-        getScreen().hide(); // Hide the current screen
         if (getScreen() != null) {
-            getScreen().dispose(); // Dispose the current screen
+            getScreen().hide();
+            getScreen().dispose();
         }
-        spriteBatch.dispose(); // Dispose the spriteBatch
-        skin.dispose(); // Dispose the skin
-        backgroundMusic.dispose(); // Dispose the sound
-        // walkSheet.dispose(); ?????????????????? I know it has to be disposed of but it does not allow me
+
+        if (spriteBatch != null) {
+            spriteBatch.dispose();
+        }
+
+        if (skin != null) {
+            skin.dispose();
+        }
+
         if (backgroundMusic != null) {
             backgroundMusic.stop();
             backgroundMusic.dispose();
@@ -160,6 +166,7 @@ public class MazeRunnerGame extends Game {
         }
     }
 
+
     // Getter methods for access from other parts of the game
 
     public Skin getSkin() {
@@ -174,4 +181,7 @@ public class MazeRunnerGame extends Game {
         return spriteBatch;
     }
 
+    public void goToGame() {
+        setScreen(new GameScreen1(this));
+    }
 }

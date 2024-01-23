@@ -6,23 +6,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sun.source.doctree.SystemPropertyTree;
 
 /**
  * The MenuScreen class is responsible for displaying the main menu of the game.
@@ -41,24 +36,31 @@ public class MenuScreen implements Screen {
      */
     public MenuScreen(MazeRunnerGame game) {
         this.game = game;
+
+        // Load background texture
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
+
         // Use the existing SpriteBatch from the game
         batch = game.getSpriteBatch();
 
+        // Set up camera and viewport
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
-
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, batch); // Create a stage for UI elements
 
-        Table table = new Table(); // Create a table for layout
+        // Set the input processor so the stage can receive input events
+        Gdx.input.setInputProcessor(stage);
+
+        // Create a table for layout
+        Table table = new Table();
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
 
         // Add a label as a title
-        table.add(new Label("Press the woman to start game!", game.getSkin(), "title")).padBottom(80).row();
+        table.add(new Label("Press the woman to start the game!", game.getSkin(), "title")).padBottom(80).row();
 
-        // Loaded image as a drawable and create and add a button to go to game screen; but for us it will be the mid-screen where the player selects a level of map to play in
+        // Loaded image as a drawable and create and add a button to go to the game screen; but for us, it will be the mid-screen where the player selects a level of the map to play in
         // The start button is the woman character
         Texture spritesheetTexture = new Texture(Gdx.files.internal("obesewomandoingcartwheels1.png"));
         TextureRegion targetRegion = new TextureRegion(spritesheetTexture, 0, 3 * 212, 221, 212);
@@ -66,19 +68,15 @@ public class MenuScreen implements Screen {
 
         // Create and add a button to go to the game screen
         table.add(goToGameButton).width(300).row();
-        goToGameButton.addListener(new InputListener() {
-            public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.ENTER) {
-                    game.goToMenu(); // Change to the game screen when Enter key is pressed -> changed to go to map selection screen
-                    return true; // Consume the event
-                }
-                return false; // Let other key events be handled
+        goToGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.goToGame(); // Change to the game screen when the button is clicked
             }
         });
     }
     @Override
     public void render(float delta) {
-        background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
         Gdx.gl.glClearColor(0, 0, 0, 0.2f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
 
@@ -89,7 +87,7 @@ public class MenuScreen implements Screen {
 
         stage.act(Math.min(delta, 1 / 30f)); // Update the stage
         stage.draw(); // Draw the stage
-        Gdx.input.setInputProcessor(stage);
+
     }
     @Override
     public void resize(int width, int height) {
