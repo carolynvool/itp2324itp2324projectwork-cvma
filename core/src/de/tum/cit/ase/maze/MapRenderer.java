@@ -22,18 +22,21 @@ public class MapRenderer{
         }
     }
     public static void main(String[] args) {
-        Map<MapCoordinates, Integer> mapData = readMapFile("maps/level-1.properties");
-        System.out.println("Map Data:");
-        mapData.forEach((coordinates, value)->
-                System.out.println(coordinates.getX() + "," + coordinates.getY() + "=" + value));
-        int[][] arrayData = convertToArrays(mapData);
-        System.out.println("Array Data:");
-        for (int[] row : arrayData) {
-            for (int value : row) {
-                System.out.print(value + " ,");
-            }
-            System.out.println();
-        }
+      for (int level = 1; level <= 5; level++){
+          String filePath = "maps/level-" + level + ".properties";
+          Map<MapCoordinates, Integer> mapData = readMapFile(filePath);
+          System.out.println("Map Data for Level " + level + ":");
+          mapData.forEach((coordinates, value)-> // lec 6 content
+                  System.out.println(coordinates.getX() + "," + coordinates.getY() + "=" + value));
+          int[][] arrayData = convertToArrays(mapData);
+          System.out.println("Array Data for Level " + level + ":");
+          for (int[] row : arrayData) {
+              for (int value : row) {
+                  System.out.print(value + " ,");
+              }
+              System.out.println();
+          }
+      }
     }
     public static Map<MapCoordinates, Integer>  readMapFile(String filePath) {
         Map<MapCoordinates, Integer> mapData = new HashMap<>();

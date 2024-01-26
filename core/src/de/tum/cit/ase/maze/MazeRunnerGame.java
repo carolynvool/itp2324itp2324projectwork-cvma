@@ -28,6 +28,7 @@ public class MazeRunnerGame extends Game {
 
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
+    private MapSelection mapSelection;
 
     /**
      * Constructor for MazeRunnerGame.
@@ -47,6 +48,8 @@ public class MazeRunnerGame extends Game {
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
         this.loadCharacterAnimation(); // Load character animation
 
+        mapSelection = new MapSelection(this);
+        setScreen(mapSelection);
         // Play some background music
         // Background sound
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
@@ -64,14 +67,19 @@ public class MazeRunnerGame extends Game {
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
+            /*
+            if (mapSelectionScreen != null) {
+        mapSelectionScreen.dispose(); // Dispose the map selection screen if it exists
+        mapSelectionScreen = null;
+             */
         }
     }
-
     /**
      * Switches to the game screen.
      */
-    public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+    public void goToGame(String mapFileName) {
+        gameScreen = new GameScreen(this, mapFileName); // Set the current screen to GameScreen // why is this null
+        this.setScreen(gameScreen);
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
@@ -104,7 +112,7 @@ public class MazeRunnerGame extends Game {
      */
     @Override
     public void dispose() {
-        getScreen().hide(); // Hide the current screen
+        //getScreen().hide(); // Hide the current screen
         getScreen().dispose(); // Dispose the current screen
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
