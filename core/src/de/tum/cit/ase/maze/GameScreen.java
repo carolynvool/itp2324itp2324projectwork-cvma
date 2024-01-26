@@ -37,29 +37,30 @@ public class GameScreen implements Screen {
     private Map<MapRenderer.MapCoordinates, Integer> mapData;
     private int value = 0;
     private int[][] arrayData;
-
-
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public GameScreen(MazeRunnerGame game) {
+    public GameScreen(MazeRunnerGame game, String mapFileName) {
         this.game = game;
-        mapData = MapRenderer.readMapFile("maps/level-1.properties");
+        mapData = MapRenderer.readMapFile(mapFileName);
         arrayData = MapRenderer.convertToArrays(mapData);
         Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
-        Texture tileSheet2 = new Texture(Gdx.files.internal("objects.png"));
+        Texture tileSheet2 = new Texture(Gdx.files.internal("things.png"));
         Texture tileSheet3 = new Texture(Gdx.files.internal("mobs.png"));
+        Texture tileSheet4 = new Texture(Gdx.files.internal("objects.png"));
 
         TextureRegion[][] region = TextureRegion.split(tileSheet, 16,16);
-        TextureRegion[][] region2 = TextureRegion.split(tileSheet3, 16,16);
+        TextureRegion[][] region2 = TextureRegion.split(tileSheet2, 16,16);
+        TextureRegion[][] region3 = TextureRegion.split(tileSheet3,16,16);
+        TextureRegion[][] region4 = TextureRegion.split(tileSheet4,16,16);
 
-        wallTexture = region[0][1];
-        entryPointTexture = region[6][0];
-        exitTexture = region[6][2];
-        trapTexture = region2[0][0];
-        enemyTexture = region2[4][0];
+        wallTexture = region[1][6];
+        entryPointTexture = region2[2][1];
+        exitTexture = region2[0][4];
+        trapTexture = region4[3][9];
+        enemyTexture = region3[4][0];
         keyTexture = region2[0][3];
 
         this.batch = new SpriteBatch();
@@ -131,7 +132,6 @@ public class GameScreen implements Screen {
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
     }
-
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false);

@@ -66,10 +66,11 @@ public class MenuScreen implements Screen {
         gotogamebtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToGame();
+                game.setScreen(new MapSelection(game));
+                dispose();
             }
         });
-
+    }
         // Create and add a button to go to the game screen
         //table.add(goToGameButton).width(300).row();
         //goToGameButton.addListener(new InputListener() {
@@ -87,7 +88,7 @@ public class MenuScreen implements Screen {
         //   game.setScreen(new GameScreen1(game)); // Change to the game screen when button is pressed
         //}
         //});
-    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0.2f);

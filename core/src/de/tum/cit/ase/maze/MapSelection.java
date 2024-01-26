@@ -13,23 +13,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.PropertiesUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import com.badlogic.gdx.files.FileHandle;
 
 public class MapSelection implements Screen {
     private final MazeRunnerGame game;
     private OrthographicCamera camera;
     Texture background;
     private Stage stage;
+    private String mapFileName;
+
     public MapSelection(MazeRunnerGame game) {
         this.game = game;
         camera = new OrthographicCamera();
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
         background = new Texture(Gdx.files.internal("beachbackgroundphoto.jpeg"));
-
-        //createLevelButtons();
+        createLevelButtons();
     }
+    
     @Override
     public void show() {
         stage.getBatch().begin();
@@ -41,7 +47,7 @@ public class MapSelection implements Screen {
         explanationLabel.setPosition(100, 350);
         stage.addActor(explanationLabel);
     }
-    /*
+
     private void createLevelButtons() {
         for (int i = 1; i <= 5; i++) {
             Texture buttonTexture = new Texture(Gdx.files.internal("buttonStock1.png"));
@@ -51,8 +57,8 @@ public class MapSelection implements Screen {
             final int levelNumber = i; // Store the level number in a final variable for the inner class
             levelButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-                    // Replace 'YOUR_MAP_NUMBER' with the actual map number or logic to determine it
-                    game.setScreen(new GameScreen1(game, levelNumber));
+                    String mapFileName = "maps/level-" + levelNumber + ".properties"; // changed
+                    game.goToGame(mapFileName);
                 }
             });
 
@@ -60,8 +66,15 @@ public class MapSelection implements Screen {
             stage.addActor(levelButton);
         }
     }
+    public String getMapFileName(){
+        if (mapFileName == null){
+            return "";// Return an empty string if mapFileName is null
+        } else {
+            return mapFileName;
+        }
 
-     */
+    }
+
 
     @Override
     public void render(float delta) {
@@ -96,8 +109,6 @@ public class MapSelection implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        background.dispose();
+        // background.dispose();
     }
-    }
-
-
+}
