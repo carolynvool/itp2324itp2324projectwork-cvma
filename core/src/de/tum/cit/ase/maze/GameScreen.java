@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
         exitTexture = region2[0][4];
         trapTexture = region4[3][9];
         enemyTexture = region3[4][0];// to be the mob by carol - assign the mob to appear randomly
-        keyTexture = region2[0][3];
+        keyTexture = region2[2][7];
         pathTexture = region[1][2];
 
         this.batch = new SpriteBatch();
