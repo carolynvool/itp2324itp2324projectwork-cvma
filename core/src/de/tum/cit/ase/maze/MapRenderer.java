@@ -61,13 +61,20 @@ public class MapRenderer{
 
         int[][] arrayData = new int[maxX + 1][maxY + 1];
 
+        // Initialize the array with the default value in order to give the key pairs of the ENTIRE map a default value, and then update only the values that are explicitly defined in the properties files
+        for (int i = 0; i <= maxX; i++) {
+            for (int j = 0; j <= maxY; j++) {
+                arrayData[i][j] = 6;
+            }
+        }
+
+        // Update only the specified coordinates
         for (Map.Entry<MapCoordinates, Integer> entry : mapData.entrySet()) {
             MapCoordinates coordinates = entry.getKey();
             int x = coordinates.getX();
             int y = coordinates.getY();
             arrayData[x][y] = entry.getValue();
         }
-
         return arrayData;
     }
 

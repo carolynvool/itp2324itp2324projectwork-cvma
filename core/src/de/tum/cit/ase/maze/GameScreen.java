@@ -22,7 +22,7 @@ public class GameScreen implements Screen {
     private final OrthographicCamera camera;
     private final BitmapFont font;
     private float sinusInput = 0f;
-    private final Texture characterTexture;
+    private Texture characterTexture;
     private Rectangle character;
     private Animation<TextureRegion> characterdownanimation;
     private float characterX, characterY;
@@ -34,6 +34,8 @@ public class GameScreen implements Screen {
     private TextureRegion trapTexture;
     private TextureRegion enemyTexture;
     private TextureRegion keyTexture;
+    private TextureRegion pathTexture;
+
     private Map<MapRenderer.MapCoordinates, Integer> mapData;
     private int value = 0;
     private int[][] arrayData;
@@ -60,8 +62,9 @@ public class GameScreen implements Screen {
         entryPointTexture = region2[2][1];
         exitTexture = region2[0][4];
         trapTexture = region4[3][9];
-        enemyTexture = region3[4][0];
+        enemyTexture = region3[4][0];// to be the mob by carol - assign the mob to appear randomly
         keyTexture = region2[0][3];
+        pathTexture = region[1][2];
 
         this.batch = new SpriteBatch();
 
@@ -113,6 +116,7 @@ public class GameScreen implements Screen {
                     case 3: game.getSpriteBatch().draw(trapTexture, x*16, y*16); break;
                     case 4: game.getSpriteBatch().draw(enemyTexture, x*16, y*16); break;
                     case 5: game.getSpriteBatch().draw(keyTexture, x*16, y*16); break;
+                    case 6: game.getSpriteBatch().draw(pathTexture,x*16,y*16);break;
                 }
             }
 
