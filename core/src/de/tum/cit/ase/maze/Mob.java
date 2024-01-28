@@ -22,7 +22,6 @@ public class Mob {
         this.height = 16;
         this.speed = 200;
         this.collisionMap = collisionMap;
-
         }
         public void update(float delta){
         // TODO implement logic on how to move mobs
