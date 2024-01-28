@@ -51,9 +51,9 @@ public class Woman extends BaseActor {
         setAnimation(down);
         // set after animation established
         setBoundaryPolygon(8);
-        setAcceleration(1);
-        setSpeed(1);
-        setDeceleration(1);
+        setAcceleration(300);
+        setSpeed(30);
+        setDeceleration(30);
     }
 
     public void act(float deltaTime) {
@@ -83,5 +83,8 @@ public class Woman extends BaseActor {
             setAnimation(right); // east
         }
         applyPhysics(deltaTime);
+    }
+    public void setInitialPosition(float x, float y) {
+        setPosition(x, y);
     }
 }

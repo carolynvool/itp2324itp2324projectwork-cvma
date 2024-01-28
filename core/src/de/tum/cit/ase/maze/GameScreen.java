@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,25 +21,16 @@ public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
+    private ExtendViewport viewport;
     private final BitmapFont font;
     private float sinusInput = 0f;
-    private Texture characterTexture;
-    private Rectangle character;
-    private Animation<TextureRegion> characterdownanimation;
-    private float characterX, characterY;
     private SpriteBatch batch;
-    private TextureRegion[] tileRegions;
-    private TextureRegion wallTexture;
-    private TextureRegion entryPointTexture;
-    private TextureRegion exitTexture;
-    private TextureRegion trapTexture;
-    private TextureRegion enemyTexture;
-    private TextureRegion keyTexture;
-    private TextureRegion pathTexture;
-
-    private Map<MapRenderer.MapCoordinates, Integer> mapData;
     private int value = 0;
-    private int[][] arrayData;
+    private Maze maze; // Add a Maze variable to connect to the maze class
+    private Woman woman;
+    private Mob mob;
+
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -46,42 +38,30 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game, String mapFileName) {
         this.game = game;
-        mapData = MapRenderer.readMapFile(mapFileName);
-        arrayData = MapRenderer.convertToArrays(mapData);
-        Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
-        Texture tileSheet2 = new Texture(Gdx.files.internal("things.png"));
-        Texture tileSheet3 = new Texture(Gdx.files.internal("mobs.png"));
-        Texture tileSheet4 = new Texture(Gdx.files.internal("objects.png"));
-
-        TextureRegion[][] region = TextureRegion.split(tileSheet, 16,16);
-        TextureRegion[][] region2 = TextureRegion.split(tileSheet2, 16,16);
-        TextureRegion[][] region3 = TextureRegion.split(tileSheet3,16,16);
-        TextureRegion[][] region4 = TextureRegion.split(tileSheet4,16,16);
-
-        wallTexture = region[1][6];
-        entryPointTexture = region2[2][1];
-        exitTexture = region2[0][4];
-        trapTexture = region4[3][9];
-        enemyTexture = region3[4][0];// to be the mob by carol - assign the mob to appear randomly
-        keyTexture = region2[2][7];
-        pathTexture = region[1][2];
+        this.maze = new Maze(mapFileName);
 
         this.batch = new SpriteBatch();
 
-        // Create and configure the camera for the game view
+        // Create and configure the camera for the game view (e.g., position, viewport, etc.)
         camera = new OrthographicCamera();
+        viewport = new ExtendViewport(maze.arrayData.length * 16, maze.arrayData[0].length * 16, camera);
         camera.setToOrtho(false);
         camera.zoom = 0.75f;
-        camera.position.set(arrayData.length * 16 / 2f, arrayData[0].length * 16 / 2f, 0);
+        camera.position.set(maze.arrayData.length * 16 / 2f, maze.arrayData[0].length * 16 / 2f, 0);
+        camera.update();
 
-        font = game.getSkin().getFont("font"); // Get the font from the game's skin
+        // Get the font from the game's skin
+        font = game.getSkin().getFont("font");
 
-        characterTexture = new Texture(Gdx.files.internal("obesewomanbananafall.png"));
-        character = new Rectangle();
-        character.x = 800 / 2 - 64 / 2; // centering bucket horisontally
-        character.y = 20; // bottom left corner of the bucket is 20 pixels above
+        //add mob
+        mob = new Mob(10, 10, calculateMovementRectangle());
+
+        // add woman
+        this.woman = new Woman(30, 30);
+
+        //set womans initial position
+        setInitialWomanPosition();
     }
-
 
     // Screen interface methods with necessary functionality
     @Override
@@ -91,54 +71,94 @@ public class GameScreen implements Screen {
             game.goToMenu();
         }
 
-        ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+        //moving the camera to follow the character
+        camera.position.set(woman.getX() + woman.getWidth() / 2, woman.getY() + woman.getHeight() / 2, 0);
+        camera.update();
 
-        camera.update(); // Update the camera
+        // Clear the screen
+        ScreenUtils.clear(0, 0, 0, 1);
 
-        // Move text in a circular path to have an example of a moving object
-        sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-        float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+        // to render the map elements
+        renderMap();
 
         // Set up and begin drawing with the sprite batch
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
+        // Important to call this before drawing anything
+        game.getSpriteBatch().begin();
 
-        for(int x = 0; x < arrayData.length; x ++){
-            for(int y = 0; y < arrayData[0].length; y++){
-                value = arrayData[x][y];
+        sinusInput += delta;
+        for(int x = 0; x < maze.arrayData.length; x ++){
+            for(int y = 0; y < maze.arrayData[0].length; y++){
+                value = maze.arrayData[x][y];
 
                 switch(value){
-                    case 0: game.getSpriteBatch().draw(wallTexture, x*16, y*16); break;
-                    case 1: game.getSpriteBatch().draw(entryPointTexture, x*16, y*16); break;
-                    case 2: game.getSpriteBatch().draw(exitTexture, x*16, y*16); break;
-                    case 3: game.getSpriteBatch().draw(trapTexture, x*16, y*16); break;
-                    case 4: game.getSpriteBatch().draw(enemyTexture, x*16, y*16); break;
-                    case 5: game.getSpriteBatch().draw(keyTexture, x*16, y*16); break;
-                    case 6: game.getSpriteBatch().draw(pathTexture,x*16,y*16);break;
+                    case 0: game.getSpriteBatch().draw(maze.wallTexture, x*16, y*16); break;
+                    case 1: game.getSpriteBatch().draw(maze.entryPointTexture, x*16, y*16); break;
+                    case 2: game.getSpriteBatch().draw(maze.exitTexture, x*16, y*16); break;
+                    case 3: game.getSpriteBatch().draw(maze.trapTexture, x*16, y*16); break;
+                    case 4: game.getSpriteBatch().draw(maze.enemyTexture, x*16, y*16); break;
+                    case 5: game.getSpriteBatch().draw(maze.keyTexture, x*16, y*16); break;
+                    case 6: game.getSpriteBatch().draw(maze.pathTexture,x*16,y*16);break;
                 }
             }
 
         }
-        // Render the text
-        // font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
 
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        /* game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
-         */
+        // Draw woman, check for collision after updating woman's position
+        woman.act(delta);
+        checkWomanWallCollision();
+        woman.draw(game.getSpriteBatch(), 1);
 
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
+        // draw out mob
+        mob.act(delta);
+        mob.draw(game.getSpriteBatch(), 1);
+
+        // Important to call this after drawing everything
+        game.getSpriteBatch().end();
     }
+    private void renderMap() {
+        camera.update();
+        game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+        game.getSpriteBatch().begin();
+
+        // Render the floor inside walls of the maze
+        game.getSpriteBatch().setColor(0.6f, 0.6f, 0.6f, 1f); // Darken the color of the path tiles
+
+        // Iterate over the mapData to determine the maximum X and Y values
+        int mapMaxX = 0;
+        int mapMaxY = 0;
+        for (MapRenderer.MapCoordinates coordinates : maze.getMapData().keySet()) {
+            mapMaxX = Math.max(mapMaxX, coordinates.getX());
+            mapMaxY = Math.max(mapMaxY, coordinates.getY());
+        }
+
+        // Render the floor
+        for (int row = 0; row < mapMaxX * 1.6; row++) {
+            for (int col = 0; col < mapMaxY * 1.6; col++) {
+                float renderX = col * 16 * 10;
+                float renderY = row * 16 * 10;
+                float renderWidth = 16 * 10;
+                float renderHeight = 16 * 10;
+                game.getSpriteBatch().draw(maze.getPathTexture(), renderX, renderY, renderWidth, renderHeight);
+            }
+        }
+
+        game.getSpriteBatch().end();
+        game.getSpriteBatch().setColor(1f, 1f, 1f, 1f); // Reset the color to default
+
+        // Other rendering logic as needed...
+        //add code to render additional game elements based on their values in the maze object. This is where you
+        //would handle rendering logic for elements other than the floor inside walls of the maze.
+    }
+
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false);
+        viewport.update(width, height, true);
+        camera.position.set(maze.arrayData.length * 16/ 2f,maze.arrayData[0].length * 16 / 2f, 0);
+        camera.update();
     }
 
     @Override
@@ -161,6 +181,62 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
     }
+    private Rectangle calculateMovementRectangle() {
+        // Calculate the movement rectangle based on maze dimensions
+        float mazeWidth = maze.arrayData.length * 16;
+        float mazeHeight = maze.arrayData[0].length * 16;
+        float rectangleWidth = 10 * 16; // 10 tiles wide
+        float rectangleHeight = 10 * 16; // 10 tiles high
 
+        // Ensure the rectangle fits within the maze dimensions
+        rectangleWidth = Math.min(rectangleWidth, mazeWidth);
+        rectangleHeight = Math.min(rectangleHeight, mazeHeight);
+
+        return new Rectangle(0, 0, rectangleWidth, rectangleHeight);
+    }
+    private void checkWomanWallCollision() {
+        int[][] arrayData = maze.getArrayData();
+        int tileSize = 16;
+
+        // Calculate the indices in the array corresponding to the woman's position
+        int arrayX = (int) (woman.getX() / tileSize);
+        int arrayY = (int) (woman.getY() / tileSize);
+
+        // Check for collisions with walls
+        if (arrayX >= 0 && arrayY >= 0 && arrayX < arrayData.length && arrayY < arrayData[0].length) {
+            if (arrayData[arrayX][arrayY] == 0) {
+                // Handle collision (e.g., stop movement)
+                woman.setSpeed(0);
+            }
+        }
+    }
+    private void setInitialWomanPosition() {
+        // Find the entry point coordinates in the map data
+        for (Map.Entry<MapRenderer.MapCoordinates, Integer> entry : maze.getMapData().entrySet()) {
+            if (entry.getValue() == 1) { // Assuming 1 is the code for the entry point
+                float entryPointX = entry.getKey().getX() * 16; // Adjust based on tile size
+                float entryPointY = entry.getKey().getY() * 16; // Adjust based on tile size
+                woman.setInitialPosition(entryPointX, entryPointY);
+                break; // No need to continue once entry point is found
+            }
+        }
+    }
     // Additional methods and logic can be added as needed for the game screen
+    // Move text in a circular path to have an example of a moving object - FOR MID PAUSE SCREEN WITH GAME PAUSE OPTIONS
+    //sinusInput += delta;
+    //float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
+    //float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+
+    // Render the text - FOR MID PAUSE SCREEN WITH GAME PAUSE OPTIONS
+    // font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+
+    // Draw the character next to the text :) / We can reuse sinusInput here
+        /* game.getSpriteBatch().draw(
+                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
+                textX - 96,
+                textY - 64,
+                64,
+                128
+        );
+         */
 }
