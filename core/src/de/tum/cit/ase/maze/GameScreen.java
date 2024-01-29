@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+
 import java.util.Map;
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
     private Mob mob;
 
 
+
     /**
      * Constructor for GameScreen. Sets up the camera and font.
      *
@@ -39,8 +41,6 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game, String mapFileName) {
         this.game = game;
         this.maze = new Maze(mapFileName);
-
-        this.batch = new SpriteBatch();
 
         // Create and configure the camera for the game view (e.g., position, viewport, etc.)
         camera = new OrthographicCamera();
@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
         camera.position.set(woman.getX() + woman.getWidth() / 2, woman.getY() + woman.getHeight() / 2, 0);
         camera.update();
 
-        // Clear the screen
+        // clear the screen
         ScreenUtils.clear(0, 0, 0, 1);
 
         // to render the map elements
@@ -87,23 +87,8 @@ public class GameScreen implements Screen {
         // Important to call this before drawing anything
         game.getSpriteBatch().begin();
 
+        // delta = time passed in sec since the previous frame; so, by increasing the input we create a repeating pattern
         sinusInput += delta;
-        for(int x = 0; x < maze.arrayData.length; x ++){
-            for(int y = 0; y < maze.arrayData[0].length; y++){
-                value = maze.arrayData[x][y];
-
-                switch(value){
-                    case 0: game.getSpriteBatch().draw(maze.wallTexture, x*16, y*16); break;
-                    case 1: game.getSpriteBatch().draw(maze.entryPointTexture, x*16, y*16); break;
-                    case 2: game.getSpriteBatch().draw(maze.exitTexture, x*16, y*16); break;
-                    case 3: game.getSpriteBatch().draw(maze.trapTexture, x*16, y*16); break;
-                    case 4: game.getSpriteBatch().draw(maze.enemyTexture, x*16, y*16); break;
-                    case 5: game.getSpriteBatch().draw(maze.keyTexture, x*16, y*16); break;
-                    case 6: game.getSpriteBatch().draw(maze.pathTexture,x*16,y*16);break;
-                }
-            }
-
-        }
 
         // Draw woman, check for collision after updating woman's position
         woman.act(delta);
@@ -117,41 +102,61 @@ public class GameScreen implements Screen {
         // Important to call this after drawing everything
         game.getSpriteBatch().end();
     }
+
+    // to render elements part of the maze itself but for the Woman and Mob (which are moving on top of the static maze)
     private void renderMap() {
+        // Clear the screen with the desired sandy background color
+        ScreenUtils.clear(139 / 255f, 69 / 255f, 19 / 255f, 1);
+
+        // Update the camera and sprite batch
         camera.update();
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
         game.getSpriteBatch().begin();
 
-        // Render the floor inside walls of the maze
-        game.getSpriteBatch().setColor(0.6f, 0.6f, 0.6f, 1f); // Darken the color of the path tiles
+        // Iterate over the maze arrayData
+        for (int x = 0; x < maze.arrayData.length; x++) {
+            for (int y = 0; y < maze.arrayData[0].length; y++) {
+                int value = maze.arrayData[x][y];
+                float renderX = x * 16 * 10;
+                float renderY = y * 16 * 10;
 
-        // Iterate over the mapData to determine the maximum X and Y values
-        int mapMaxX = 0;
-        int mapMaxY = 0;
-        for (MapRenderer.MapCoordinates coordinates : maze.getMapData().keySet()) {
-            mapMaxX = Math.max(mapMaxX, coordinates.getX());
-            mapMaxY = Math.max(mapMaxY, coordinates.getY());
-        }
-
-        // Render the floor
-        for (int row = 0; row < mapMaxX * 1.6; row++) {
-            for (int col = 0; col < mapMaxY * 1.6; col++) {
-                float renderX = col * 16 * 10;
-                float renderY = row * 16 * 10;
-                float renderWidth = 16 * 10;
-                float renderHeight = 16 * 10;
-                game.getSpriteBatch().draw(maze.getPathTexture(), renderX, renderY, renderWidth, renderHeight);
+                switch (value) {
+                    case 0:
+                        game.getSpriteBatch().draw(maze.wallTexture, x * 16, y * 16);
+                        break;
+                    case 1:
+                        game.getSpriteBatch().draw(maze.entryPointTexture, x * 16, y * 16);
+                        break;
+                    case 2:
+                        game.getSpriteBatch().draw(maze.exitTexture, x * 16, y * 16);
+                        break;
+                    case 3:
+                        game.getSpriteBatch().draw(maze.trapTexture, x * 16, y * 16);
+                        break;
+                    case 4:
+                        game.getSpriteBatch().draw(maze.enemyTexture, x * 16, y * 16);
+                        break;
+                    case 5:
+                        game.getSpriteBatch().draw(maze.keyTexture, x * 16, y * 16);
+                        break;
+                    case 6:
+                        game.getSpriteBatch().draw(maze.pathTexture, x * 16, y * 16);
+                        break;
+                }
             }
+
         }
 
-        game.getSpriteBatch().end();
-        game.getSpriteBatch().setColor(1f, 1f, 1f, 1f); // Reset the color to default
 
-        // Other rendering logic as needed...
+                // Other rendering logic as needed...
         //add code to render additional game elements based on their values in the maze object. This is where you
         //would handle rendering logic for elements other than the floor inside walls of the maze.
+        game.getSpriteBatch().end();
+
+
     }
+
 
     @Override
     public void resize(int width, int height) {
